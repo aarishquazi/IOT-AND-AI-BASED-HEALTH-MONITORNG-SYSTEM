@@ -9,7 +9,7 @@ This project integrates IoT sensors with AI models to provide real-time monitori
 
 This system monitors key health metrics like:
 - Heart Rate ❤️
-- Oxygen Saturation (SpO₂) 🌡️
+- Temperature Sensor (LM35) 🌡️
 - Live ECG Plots 📈
 - AI-based Heart Disease Prediction 🧠
 
