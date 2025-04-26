@@ -32,15 +32,15 @@ It connects hardware sensors to a web dashboard and a cloud database, providing 
 
 | Real Time Dashboard | Patient History |
 | :-----------------: | :--------------: |
-| ![](project/images/Dashboard.png) | ![](project/images/Patient_History.png) |
+| ![](Project/Images/Dashboard.png) | ![](Project/Images/Patient_History.png) |
 
 | Live ECG Plot | Prediction Page |
 | :-----------: | :--------------: |
-| ![](project/images/ECG_1.png) | ![](project/images/AI_Predict.png) |
+| ![](Project/Images/ECG_1.png) | ![](Project/Images/AI_Predict.png) |
 
 | About Page | Supabase Cloud Database |
 | :--------: | :----------------------: |
-| ![](project/images/About.png) | ![](project/images/Cloud.png) |
+| ![](Project/Images/About.png) | ![](Project/Images/Cloud.png) |
 
 ---
 
@@ -59,10 +59,9 @@ It connects hardware sensors to a web dashboard and a cloud database, providing 
 ```bash
 ├── project/
 │   ├── images/         # Screenshots & ECG images
-│   ├── index.html      # Dashboard page
-│   ├── css/            # Stylesheets
-│   ├── js/             # Scripts
-├── models/             # AI Models and Scripts
-├── arduino_code/       # Arduino programs for sensors
+├── ECG Model/             # AI Models and Scripts
+├── Arduino Code/       # Arduino programs for sensors
+├── Sensor Data Superbase Upload/       # Arduino data upload to superbase cloud
+├── Web Dash/       # Web dashboard for real time health monitoring and prediction
 ├── README.md           # You're here
 ├── .gitignore
