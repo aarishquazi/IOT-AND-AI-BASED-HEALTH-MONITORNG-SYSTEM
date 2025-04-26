@@ -19,12 +19,12 @@ It connects hardware sensors to a web dashboard and a cloud database, providing 
 
 ## 🛠️ Tech Stack
 
-- **IoT Hardware**: Arduino Uno + MAX30102 + AD8232 ECG Sensor
-- **Frontend**: HTML5, CSS3, JavaScript, React.js
-- **Backend**: Node.js, Firebase / Supabase
+- **IoT Hardware**: Arduino Uno + LM35 + Pulse Rate + AD8232 ECG Sensor
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Backend**: Python Fast API
 - **Database**: Supabase Cloud (PostgreSQL based)
-- **AI Model**: Trained Deep Learning model for ECG classification
-- **Deployment**: GitHub + Cloud Hosting
+- **AI Model**: Transfer Learning based Convolutional Neural Network(CNN) for ECG classification
+- **Deployment**: Remaining......
 
 ---
 
