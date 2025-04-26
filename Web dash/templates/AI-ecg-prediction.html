@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI-Based ECG Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7fafd;
+        }
+        .header {
+            background-color: #004d99;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>🧠 AI-Based ECG Prediction</h2>
+        <p>Upload ECG waveform snapshot for image-based CNN prediction</p>
+    </div>
+
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card p-4">
+                    <h5 class="text-center">📷 Upload ECG Image</h5>
+                    <input type="file" class="form-control" id="imageInput" accept="image/png">
+                    <button class="btn btn-primary mt-3 w-100" onclick="predictECGImage()">Predict</button>
+                    <div id="resultBox" class="mt-4 text-center"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6 text-center">
+                <h5>📁 Save Snapshot for CNN Training</h5>
+                <canvas id="ecgSnapshot" width="400" height="100" style="border:1px solid #ccc;"></canvas>
+                <br>
+                <input type="text" id="labelInput" placeholder="Label (Normal/Abnormal)" class="form-control w-50 mx-auto mt-2">
+                <button class="btn btn-success mt-2" onclick="saveSnapshot()">Save to Supabase</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function predictECGImage() {
+            const fileInput = document.getElementById('imageInput');
+            if (!fileInput.files.length) return alert("Please select an image!");
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            const res = await fetch('/predict-ecg-image', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+
+            const result = `<div class="alert alert-${data.result === 'Normal' ? 'success' : 'danger'}">
+                Result: <strong>${data.result}</strong><br>
+                Confidence: ${data.probability.toFixed(2)}
+            </div>`;
+            document.getElementById('resultBox').innerHTML = result;
+        }
+
+        function saveSnapshot() {
+            const canvas = document.getElementById('ecgSnapshot');
+            const label = document.getElementById('labelInput').value.trim();
+            if (!label) return alert("Please enter a label!");
+
+            canvas.toBlob(blob => {
+                const formData = new FormData();
+                formData.append('file', blob, `${label}_${Date.now()}.png`);
+                formData.append('label', label);
+
+                fetch('/upload-snapshot-to-supabase', {
+                    method: 'POST',
+                    body: formData
+                }).then(res => res.json()).then(d => {
+                    alert("✅ Snapshot uploaded to Supabase successfully!");
+                }).catch(err => alert("❌ Upload failed"));
+            });
+        }
+    </script>
+</body>
+</html>
