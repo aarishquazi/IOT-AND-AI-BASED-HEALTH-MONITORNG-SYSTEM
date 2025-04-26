@@ -36,7 +36,7 @@ It connects hardware sensors to a web dashboard and a cloud database, providing 
 
 | Live ECG Plot | Prediction Page |
 | :-----------: | :--------------: |
-| ![](Project/Images/ECG_1.png) | ![](Project/Images/AI_Predict.png) |
+| ![](Project/Images/ECG_2.png) | ![](Project/Images/AI_Predict.png) |
 
 | About Page | Supabase Cloud Database |
 | :--------: | :----------------------: |
