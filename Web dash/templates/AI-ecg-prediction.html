@@ -1,93 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>AI-Based ECG Prediction</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f7fafd;
-        }
-        .header {
-            background-color: #004d99;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        .card {
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI-Based ECG Prediction</title>
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+
+  <style>
+    body {
+      background-color: #f7fafd;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar {
+      background-color: #004d99;
+    }
+
+    .navbar-brand, .nav-link {
+      color: white !important;
+    }
+
+    .header {
+      background-color: #004d99;
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      border-bottom: 5px solid #0099ff;
+    }
+
+    .header h2 {
+      font-size: 1.8rem;
+    }
+
+    .card {
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      background-color: white;
+    }
+
+    #resultBox .alert {
+      font-size: 1rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <h2>🧠 AI-Based ECG Prediction</h2>
-        <p>Upload ECG waveform snapshot for image-based CNN prediction</p>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse-fill me-1"></i> Health Monitor</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse mt-2 mt-lg-0" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
+          <li class="nav-item"><a class="nav-link" href="/real-time-ecg">ECG Graph</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/ai-prediction">AI Prediction</a></li>
+          <li class="nav-item"><a class="nav-link" href="/report-generator">AI Report</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+        </ul>
+      </div>
     </div>
+  </nav>
 
-    <div class="container py-4">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card p-4">
-                    <h5 class="text-center">📷 Upload ECG Image</h5>
-                    <input type="file" class="form-control" id="imageInput" accept="image/png">
-                    <button class="btn btn-primary mt-3 w-100" onclick="predictECGImage()">Predict</button>
-                    <div id="resultBox" class="mt-4 text-center"></div>
-                </div>
-            </div>
-        </div>
+  <!-- Header -->
+  <div class="header">
+    <h2><i class="bi bi-cpu"></i> AI-Based ECG Prediction</h2>
+    <p>Upload an ECG image and let AI predict the result</p>
+  </div>
 
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-6 text-center">
-                <h5>📁 Save Snapshot for CNN Training</h5>
-                <canvas id="ecgSnapshot" width="400" height="100" style="border:1px solid #ccc;"></canvas>
-                <br>
-                <input type="text" id="labelInput" placeholder="Label (Normal/Abnormal)" class="form-control w-50 mx-auto mt-2">
-                <button class="btn btn-success mt-2" onclick="saveSnapshot()">Save to Supabase</button>
-            </div>
+  <!-- Content -->
+  <div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <div class="card p-4">
+          <h5 class="text-center mb-3"><i class="bi bi-upload"></i> Upload ECG Image</h5>
+          <input type="file" class="form-control mb-3" id="imageInput" accept="image/*">
+          <button class="btn btn-primary w-100" onclick="predictECGImage()">
+            <i class="bi bi-robot"></i> Predict
+          </button>
+          <div id="resultBox" class="mt-4 text-center"></div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        async function predictECGImage() {
-            const fileInput = document.getElementById('imageInput');
-            if (!fileInput.files.length) return alert("Please select an image!");
+  <!-- Script -->
+  <script>
+    async function predictECGImage() {
+      const fileInput = document.getElementById('imageInput');
+      const resultBox = document.getElementById('resultBox');
+      resultBox.innerHTML = '';
 
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
+      if (!fileInput.files.length) {
+        resultBox.innerHTML = `<div class="alert alert-warning">⚠️ Please select an ECG image.</div>`;
+        return;
+      }
 
-            const res = await fetch('/predict-ecg-image', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await res.json();
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
 
-            const result = `<div class="alert alert-${data.result === 'Normal' ? 'success' : 'danger'}">
-                Result: <strong>${data.result}</strong><br>
-                Confidence: ${data.probability.toFixed(2)}
-            </div>`;
-            document.getElementById('resultBox').innerHTML = result;
-        }
+      // Show loading spinner
+      resultBox.innerHTML = `
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2 text-muted">Predicting...</p>
+      `;
 
-        function saveSnapshot() {
-            const canvas = document.getElementById('ecgSnapshot');
-            const label = document.getElementById('labelInput').value.trim();
-            if (!label) return alert("Please enter a label!");
+      try {
+        const res = await fetch('/predict-ecg-image', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
 
-            canvas.toBlob(blob => {
-                const formData = new FormData();
-                formData.append('file', blob, `${label}_${Date.now()}.png`);
-                formData.append('label', label);
+        const color = data.result === 'Normal' ? 'success' : 'danger';
+        resultBox.innerHTML = `
+          <div class="alert alert-${color}">
+            <h6 class="mb-2">🧠 Prediction Result:</h6>
+            <strong>${data.result}</strong><br>
+            Confidence: <strong>${(data.probability * 100).toFixed(2)}%</strong>
+          </div>
+        `;
+      } catch (error) {
+        resultBox.innerHTML = `<div class="alert alert-danger">❌ Error processing image. Please try again.</div>`;
+      }
+    }
+  </script>
 
-                fetch('/upload-snapshot-to-supabase', {
-                    method: 'POST',
-                    body: formData
-                }).then(res => res.json()).then(d => {
-                    alert("✅ Snapshot uploaded to Supabase successfully!");
-                }).catch(err => alert("❌ Upload failed"));
-            });
-        }
-    </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

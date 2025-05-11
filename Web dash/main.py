@@ -9,15 +9,21 @@ import numpy as np
 import tensorflow as tf
 import os
 from datetime import datetime
+import pytz
 from dotenv import load_dotenv
 import cv2
 import numpy as np
+from langchain_groq import ChatGroq
+from langchain.prompts import ChatPromptTemplate
+from langchain.schema import HumanMessage, SystemMessage
 
 # Load environment variables
 load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_API_KEY = os.getenv("SUPABASE_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
 HEADERS = {
     "apikey": SUPABASE_API_KEY,
     "Authorization": f"Bearer {SUPABASE_API_KEY}",
@@ -36,6 +42,38 @@ templates = Jinja2Templates(directory=TEMPLATE_DIR)
 
 # Load the model
 model = tf.keras.models.load_model("model.h5")
+
+# Initialize LangChain Groq
+llm = ChatGroq(
+    model="llama-3.1-8b-instant",
+    temperature=0,
+    max_tokens=None,
+    timeout=None,
+    max_retries=2,
+    groq_api_key=GROQ_API_KEY
+)
+
+# Create health analysis prompt template
+HEALTH_ANALYSIS_TEMPLATE = (
+    "You are a medical AI assistant providing health analysis reports.\n"
+    "Analyze the following health vitals and provide a comprehensive health report:\n\n"
+    "Vital Signs:\n"
+    "- Body Temperature: {temperature}°C\n"
+    "- Pulse Rate: {pulse_rate} BPM\n"
+    "- ECG Analysis: {ecg_result} (Confidence: {ecg_confidence:.2f})\n\n"
+    "Patient Information: \n"
+    "- Patient Name: {name}\n"
+    "- Date of Report: {date}°C\n"
+    "Please provide a detailed analysis including:\n"
+    "1. Overall health assessment\n"
+    "2. Analysis of each vital sign\n"
+    "3. Potential concerns or recommendations\n"
+    "4. General health advice\n\n"
+    "Format the response in a clear, professional manner suitable for a medical report.\n"
+    "Use bullet points and sections for better readability."
+)
+
+health_prompt = ChatPromptTemplate.from_template(HEALTH_ANALYSIS_TEMPLATE)
 
 # Utility function to fetch Supabase data
 def fetch_data(table: str, limit: int = 100):
@@ -58,6 +96,10 @@ async def history_page(request: Request):
 @app.get("/ai-prediction", response_class=HTMLResponse)
 async def ai_prediction(request: Request):
     return templates.TemplateResponse("AI-ecg-prediction.html", {"request": request})
+
+@app.get("/report-generator", response_class=HTMLResponse)
+async def report_generator(request: Request):
+    return templates.TemplateResponse("report-generator.html", {"request": request})
 
 @app.get("/live-data")
 async def live_data():
@@ -127,3 +169,55 @@ async def upload_snapshot(file: UploadFile = File(...), label: str = Form(...)):
     if res.status_code in [200, 201]:
         return {"message": "Snapshot uploaded successfully!"}
     return JSONResponse(content={"error": res.text}, status_code=res.status_code)
+
+@app.post("/generate-report")
+async def generate_report(
+    name: str = Form(...),
+    temperature: float = Form(...),
+    pulseRate: int = Form(...),
+    ecgImage: UploadFile = File(...)
+):
+    try:
+        # Read and preprocess ECG image
+        contents = await ecgImage.read()
+        npimg = np.frombuffer(contents, np.uint8)
+        img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
+        img = cv2.resize(img, (224, 224))
+        img = img.astype("float32") / 255.0
+        img = np.expand_dims(img, axis=0)
+
+        # Predict using model
+        prediction = model.predict(img)
+        ecg_result = "Abnormal" if prediction[0][0] < 0.5 else "Normal"
+        ecg_confidence = float(prediction[0][0])
+        ist = pytz.timezone("Asia/Kolkata")
+        now_ist = datetime.now(ist)
+        # Generate report with LLM (LangChain or similar)
+        messages = health_prompt.format_messages(
+            temperature=temperature,
+            pulse_rate=pulseRate,
+            ecg_result=ecg_result,
+            ecg_confidence=ecg_confidence,
+            name=name,
+            date=now_ist.strftime("%d-%m-%Y %I:%M:%S %p")
+        )
+        response = llm.invoke(messages)
+        report = response.content
+
+        return {
+            "report": report,
+            "name": name,
+            "timestamp": now_ist.strftime("%d-%m-%Y %I:%M:%S %p"),
+            "vitals": {
+                "temperature": temperature,
+                "pulse_rate": pulseRate,
+                "ecg_result": ecg_result,
+                "ecg_confidence": ecg_confidence
+            }
+        }
+
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Error generating report: {str(e)}"}
+        )

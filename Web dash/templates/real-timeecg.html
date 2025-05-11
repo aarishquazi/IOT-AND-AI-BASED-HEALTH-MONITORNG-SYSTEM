@@ -1,73 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Live ECG Graph</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real-Time ECG Chart</title>
+
+    <!-- Bootstrap & Chart.js -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
             background-color: #f4f9ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
+        .navbar {
+            background-color: #004d99;
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: white !important;
+        }
+
         .header {
             background-color: #004d99;
             color: white;
-            padding: 20px;
             text-align: center;
+            padding: 2rem 1rem;
+            border-bottom: 5px solid #0099ff;
+        }
+
+        .header h2 {
+            font-size: 1.8rem;
+        }
+
+        .header p {
+            font-size: 1rem;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: center;
+        }
+
+        .chart-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            /* Increased from 800px */
+            min-width: 400px;
+            /* Ensure it still works well on mobile */
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 700px !important;
+            /* Increased height */
+        }
+
+        @media (max-width: 768px) {
+            canvas {
+                height: 500px !important;
+                /* Better on tablets */
+            }
+        }
+
+        @media (max-width: 576px) {
+            canvas {
+                height: 400px !important;
+                /* Still viewable on phones */
+            }
         }
     </style>
 </head>
+
 <body>
-    <div class="header">
-        <h2>📊 Real-Time ECG Graph</h2>
-        <p>Displaying last 30 seconds of ECG values</p>
-    </div>
 
-    <div class="container mt-4">
-        <div class="mb-3 text-end">
-            <label class="form-label me-2">View Mode:</label>
-            <select id="viewMode" class="form-select d-inline-block w-auto">
-                <option value="smoothed" selected>Smoothed</option>
-                <option value="raw">Raw</option>
-            </select>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse-fill me-1"></i> Health Monitor</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse mt-2 mt-lg-0" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/real-time-ecg">ECG Graph</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/ai-prediction">AI Prediction</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/report-generator">AI Report</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                </ul>
+            </div>
         </div>
-        <canvas id="ecgChart" height="400"></canvas>
+    </nav>
+
+    <!-- Header -->
+    <div class="header">
+        <h2><i class="bi bi-activity"></i> Real-Time ECG Graph</h2>
+        <p>Displaying the latest 30 seconds of ECG signal</p>
     </div>
 
+    <!-- Chart Area -->
+    <div class="container py-4">
+        <div class="d-flex justify-content-end mb-3">
+            <div>
+                <label class="form-label me-2">View Mode:</label>
+                <select id="viewMode" class="form-select d-inline-block view-mode-select">
+                    <option value="smoothed" selected>Smoothed</option>
+                    <option value="raw">Raw</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-wrapper">
+                <canvas id="ecgChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart Script -->
     <script>
         const ctx = document.getElementById('ecgChart').getContext('2d');
         const ecgChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: Array.from({length: 30}, (_, i) => i),
+                labels: Array.from({ length: 30 }, (_, i) => i),
                 datasets: [{
                     label: 'ECG Signal',
                     data: [],
-                    borderColor: 'rgb(75, 192, 192)',
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
                     tension: 0.3,
-                    fill: false
+                    pointRadius: 0,
                 }]
             },
             options: {
-                animation: false,
+                animation: {
+                    duration: 0 // disables animation delay to make it real-time
+                },
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     x: {
+                        ticks: {
+                            maxTicksLimit: 15,
+                            color: '#666',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: '#e0e0e0'
+                        },
                         title: {
                             display: true,
-                            text: 'Time (seconds)'
+                            text: 'Time (s)',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
                         }
                     },
                     y: {
                         min: 0,
                         max: 1024,
+                        ticks: {
+                            stepSize: 256,
+                            color: '#666',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: '#f0f0f0',
+                            borderDash: [4, 4]
+                        },
                         title: {
                             display: true,
-                            text: 'ECG Value'
+                            text: 'ECG Value',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
                         }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+                elements: {
+                    line: {
+                        tension: 0.25,
+                        borderWidth: 2
+                    },
+                    point: {
+                        radius: 0
                     }
                 }
             }
+
         });
 
         async function fetchECG() {
@@ -76,7 +222,7 @@
             const data = await response.json();
             if (!Array.isArray(data)) return;
 
-            ecgChart.data.labels = Array.from({length: data.length}, (_, i) => i);
+            ecgChart.data.labels = Array.from({ length: data.length }, (_, i) => i);
             ecgChart.data.datasets[0].data = data.map(d => d.ecg_value);
             ecgChart.update();
         }
@@ -84,5 +230,8 @@
         setInterval(fetchECG, 1000);
         window.onload = fetchECG;
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

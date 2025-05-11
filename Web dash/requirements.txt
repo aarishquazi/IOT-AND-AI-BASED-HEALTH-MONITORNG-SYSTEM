@@ -1,5 +1,6 @@
 fastapi
 uvicorn
+gunicorn
 requests
 python-dotenv
 numpy
@@ -7,3 +8,6 @@ tensorflow
 jinja2
 python-multipart
 opencv-python
+langchain-groq
+langchain
+pytz

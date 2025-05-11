@@ -1,216 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IOT AND AI BASED HEALTH MONITORING SYSTEM</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IOT & AI Health Monitoring System</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+
   <style>
     body {
       background-color: #f4f9ff;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
     .navbar {
       background-color: #004d99;
     }
+
     .navbar-brand, .nav-link {
+      color: white !important;
+    }
+
+    .navbar-toggler {
+      border: none;
+    }
+
+    .header {
+      background-color: #004d99;
       color: white;
+      padding: 2rem 1rem;
+      border-bottom: 5px solid #0099ff;
+      text-align: center;
     }
-    .navbar-brand:hover, .nav-link:hover {
-      color: #d9e1e8;
+
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
     }
+
+    .header p {
+      font-size: 1rem;
+      margin: 0;
+    }
+
     .vital-card {
-      padding: 25px;
-      border-radius: 10px;
-      background-color: white;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 1.5rem;
+      transition: 0.3s;
+      height: 100%;
     }
+
+    .vital-card:hover {
+      transform: translateY(-5px);
+    }
+
     .vital-title {
-      font-size: 1.2rem;
-      color: #333;
+      font-size: 0.95rem;
+      color: #666;
     }
+
     .vital-value {
       font-size: 2rem;
-      font-weight: bold;
+      font-weight: 600;
+      margin-top: 0.5rem;
     }
+
+    .members-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 1.2rem;
+      height: 100%;
+    }
+
+    .members-card h5 {
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .about-section {
+      background-color: #e9f5ff;
+      padding: 3rem 1.5rem;
+    }
+
+    .about-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-text {
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
     .footer {
       background-color: #f1f1f1;
       padding: 20px;
       text-align: center;
-      margin-top: 50px;
+      font-size: 0.9rem;
     }
-    .about-section {
-      background-color: #e9f5ff;
-      padding: 40px 0;
-      margin-top: 50px;
-    }
-    .about-text {
-      font-size: 1.1rem;
-      max-width: 900px;
-      margin: 0 auto;
-      line-height: 1.7;
-    }
-    .nav-item.active {
-      font-weight: bold;
-    }
-    .header {
-      background-color: #004d99;
-      color: white;
-      padding: 30px 0;
-      text-align: center;
-      border-bottom: 5px solid #0099ff;
-    }
-    .header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-    .header p {
-      font-size: 1.2rem;
-    }
-    /* Project Members Section */
-    .members-card {
-      padding: 20px;
-      background-color: white;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-      border-radius: 10px;
-    }
-    .members-card h5 {
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    .members-card p {
-      font-size: 1rem;
-      color: #777;
+
+    @media (max-width: 576px) {
+      .vital-value {
+        font-size: 1.5rem;
+      }
+      .vital-title {
+        font-size: 0.85rem;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">IOT & AI HEALTH MONITORING</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link active" href="/">Dashboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/history">Patient History</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/real-time-ecg">ECG Graph</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/about">About</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Header Section -->
-  <div class="header">
-    <h1>IOT AND AI BASED HEALTH MONITORING SYSTEM</h1>
-    <p class="lead">Real-time monitoring of vital health parameters: ECG, Pulse, and Temperature.</p>
-  </div>
-
-  <!-- Main Content -->
-  <div class="container py-5">
-    <h2 class="text-center mb-4">Live Vitals Overview</h2>
-    <div class="row text-center g-4">
-      <div class="col-md-3">
-        <div class="vital-card">
-          <div class="vital-title">Patient / Device ID</div>
-          <div class="vital-value" id="device_id">--</div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="vital-card">
-          <div class="vital-title">ECG Value</div>
-          <div class="vital-value text-primary" id="ecg_value">--</div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="vital-card">
-          <div class="vital-title">Pulse Rate</div>
-          <div class="vital-value text-danger" id="pulse_value">--</div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="vital-card">
-          <div class="vital-title">Temperature (°C)</div>
-          <div class="vital-value text-success" id="temperature">--</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="text-center mt-4">
-      <p><strong>Last Updated:</strong> <span id="timestamp">--</span></p>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse-fill me-1"></i> Health Monitor</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse mt-2 mt-lg-0" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="/">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
+        <li class="nav-item"><a class="nav-link" href="/real-time-ecg">ECG Graph</a></li>
+        <li class="nav-item"><a class="nav-link" href="/ai-prediction">AI Prediction</a></li>
+        <li class="nav-item"><a class="nav-link" href="/report-generator">AI Report</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+      </ul>
     </div>
   </div>
+</nav>
 
-  <!-- Project Members Section -->
-  <div class="container py-5">
-    <h2 class="text-center mb-4">Project Team Members</h2>
-    <div class="row text-center g-4">
-      <div class="col-md-3">
-        <div class="members-card">
-          <h5>Aarish Quazi</h5>
-          <p>Project Leader</p>
-        </div>
+<!-- Header -->
+<div class="header">
+  <h1>IOT & AI Based Health Monitoring</h1>
+  <p>Real-time ECG, Pulse Rate & Body Temperature</p>
+</div>
+
+<!-- Vitals -->
+<div class="container py-5">
+  <h2 class="text-center mb-4">Live Vitals</h2>
+  <div class="row g-4 text-center">
+    <div class="col-12 col-sm-6 col-md-3">
+      <div class="vital-card">
+        <div class="vital-title"><i class="bi bi-cpu me-2 text-secondary"></i>Device ID</div>
+        <div class="vital-value" id="device_id">--</div>
       </div>
-      <div class="col-md-3">
-        <div class="members-card">
-          <h5>Aaditya Kaushik</h5>
-          <p>AI & Backend Developer</p>
-        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+      <div class="vital-card">
+        <div class="vital-title"><i class="bi bi-activity me-2 text-primary"></i>ECG</div>
+        <div class="vital-value text-primary" id="ecg_value">--</div>
       </div>
-      <div class="col-md-3">
-        <div class="members-card">
-          <h5>Anshuman Singh Sikarwar</h5>
-          <p>Cloud Integration</p>
-        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+      <div class="vital-card">
+        <div class="vital-title"><i class="bi bi-heart-pulse me-2 text-danger"></i>Pulse Rate</div>
+        <div class="vital-value text-danger" id="pulse_value">--</div>
       </div>
-      <div class="col-md-3">
-        <div class="members-card">
-          <h5>Ashmit Kumar Kurmi</h5>
-          <p>Hardware & Sensors</p>
-        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+      <div class="vital-card">
+        <div class="vital-title"><i class="bi bi-thermometer-half me-2 text-success"></i>Temperature (°C)</div>
+        <div class="vital-value text-success" id="temperature">--</div>
       </div>
     </div>
   </div>
-
-  <!-- About Section -->
-  <div class="about-section text-center">
-    <h3>About the Project</h3>
-    <p class="about-text">The IOT and AI Based Health Monitoring System aims to provide real-time health monitoring by collecting data such as ECG, Pulse Rate, and Temperature. This project uses sensor data and artificial intelligence to predict abnormal health conditions, allowing for timely medical intervention. The collected data can be used to predict potential health risks, helping doctors make better decisions for their patients.</p>
+  <div class="text-center mt-4">
+    <p><strong>Last Updated:</strong> <span id="timestamp">--</span></p>
   </div>
+</div>
 
-  <div class="about-section text-center">
-    <h3>About Swami Keshvanand Institute of Technology</h3>
-    <p class="about-text">Swami Keshvanand Institute of Technology (SKIT), Jaipur, is one of the top engineering institutes in Rajasthan, known for providing high-quality education in various fields of engineering and technology. SKIT fosters innovation and technical expertise among students, preparing them for real-world challenges in industries like IT, healthcare, and more. The college has been a hub for technological advancements and research initiatives, focusing on practical learning and community service.</p>
+<!-- Mentor Section -->
+<div class="container pb-5">
+  <h2 class="text-center mb-4"><i class="bi bi-person-badge icon-title me-2"></i>Project Mentor</h2>
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="members-card text-center">
+        <h5>Dr. Niketa Sharma</h5>
+        <p>Associate Professor, Computer Science</p>
+      </div>
+    </div>
   </div>
+</div>
 
-  <div class="footer">
-    <p>&copy; 2025 IOT & AI Health Monitoring | Developed by the Project Team</p>
+<!-- Team Section -->
+<div class="container pb-5">
+  <h2 class="text-center mb-4"><i class="bi bi-people icon-title me-2"></i>Project Team Members</h2>
+  <div class="row text-center g-4">
+    <div class="col-md-3 col-sm-6">
+      <div class="card card-member p-3">
+        <h6>Aarish Quazi</h6>
+        <p class="text-muted mb-0">Project Leader</p>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="card card-member p-3">
+        <h6>Aaditya Kaushik</h6>
+        <p class="text-muted mb-0">AI & Backend Developer</p>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="card card-member p-3">
+        <h6>Anshuman Singh Sikarwar</h6>
+        <p class="text-muted mb-0">Cloud Integration</p>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="card card-member p-3">
+        <h6>Ashmit Kumar Kurmi</h6>
+        <p class="text-muted mb-0">Hardware & Sensors</p>
+      </div>
+    </div>
   </div>
+</div>
 
-  <script>
-    async function fetchVitals() {
+<!-- About Project -->
+<div class="about-section text-center">
+  <h3 class="text-center mb-4"><i class="bi bi-info-circle icon-title  me-2"></i>About the Project</h3>
+  <p class="about-text">
+    The IOT and AI Based Health Monitoring System aims to provide real-time health monitoring by collecting data such as ECG, Pulse Rate, and Temperature. This project uses sensor data and artificial intelligence to predict abnormal health conditions, allowing for timely medical intervention. The collected data can be used to predict potential health risks, helping doctors make better decisions for their patients.
+  </p>
+</div>
+
+<!-- About SKIT -->
+<div class="about-section text-center">
+  <h3 class="text-center mb-4"><i class="bi bi-building icon-title  me-2"></i> About Swami Keshvanand Institute of Technology</h3>
+  <p class="about-text">
+    Swami Keshvanand Institute of Technology (SKIT), Jaipur, is one of the top engineering institutes in Rajasthan, known for providing high-quality education in various fields of engineering and technology. SKIT fosters innovation and technical expertise among students, preparing them for real-world challenges in industries like IT, healthcare, and more. The college has been a hub for technological advancements and research initiatives, focusing on practical learning and community service.
+  </p>
+</div>
+
+<!-- Footer -->
+
+<div class="footer">
+  &copy; 2025 IOT & AI Health Monitoring | Guided by Dr. Niketa Sharma | Project by Aarish, Aaditya, Anshuman & Ashmit
+</div>
+
+<!-- Scripts -->
+<script>
+  async function fetchVitals() {
+    try {
       const res = await fetch('/live-data');
       const data = await res.json();
       document.getElementById('ecg_value').innerText = data.ecg_value ?? '--';
       document.getElementById('pulse_value').innerText = data.pulse_value ?? '--';
       document.getElementById('temperature').innerText = data.temperature ?? '--';
       document.getElementById('device_id').innerText = data.device_id ?? 'UnifiedVitals';
-      document.getElementById('timestamp').innerText = data.timestamp ? new Date(data.timestamp).toLocaleString() : '--';
+      document.getElementById('timestamp').innerText = data.timestamp
+        ? new Date(data.timestamp).toLocaleString()
+        : '--';
+    } catch (error) {
+      console.error("Error fetching vitals:", error);
     }
-    setInterval(fetchVitals, 5000);
-    window.onload = fetchVitals;
-  </script>
+  }
+
+  // Auto-refresh every 5 seconds
+  setInterval(fetchVitals, 5000);
+  window.onload = fetchVitals;
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+ 

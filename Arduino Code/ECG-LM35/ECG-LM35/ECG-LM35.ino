@@ -34,7 +34,7 @@ void loop() {
     lastECGRead = now;
 
     if (digitalRead(LO_PLUS) == 1 || digitalRead(LO_MINUS) == 1) {
-      Serial.println("{\"status\":\"Lead off detected\"}");
+      // Serial.println("{\"status\":\"Lead off detected\"}");
     } else {
       int raw = analogRead(ECG_PIN);
       ecgBuffer[ecgIndex] = raw;
