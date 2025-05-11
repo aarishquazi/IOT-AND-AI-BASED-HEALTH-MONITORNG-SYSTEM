@@ -1,161 +1,661 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Patient History - Health Monitor</title>
 
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Animate.css for animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <style>
+    :root {
+      --primary: #0074d9;
+      --primary-dark: #004d99;
+      --primary-light: #e9f5ff;
+      --secondary: #004085;
+      --accent: #ff6b6b;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --dark: #343a40;
+      --light: #f8f9fa;
+      --text-dark: #343a40;
+      --text-light: #f8f9fa;
+      --text-muted: #6c757d;
+      --border-radius: 12px;
+      --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
     body {
-      background-color: #f8f9fa;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fbff;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      scroll-behavior: smooth;
     }
 
+    /* Improved Navbar */
     .navbar {
-      background-color: #004d99;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 0.75rem 1rem;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
     }
 
-    .navbar-brand, .nav-link {
+    .navbar-brand {
       color: white !important;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
 
+    .navbar-nav .nav-link {
+      color: rgba(255, 255, 255, 0.9) !important;
+      font-weight: 500;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      transition: var(--transition);
+      margin: 0 2px;
+    }
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      color: white !important;
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .navbar-nav .nav-link.active {
+      position: relative;
+    }
+
+    .navbar-nav .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 3px;
+      background-color: white;
+      border-radius: 3px;
+    }
+
+    /* Enhanced Header Section */
     .header {
-      background-color: #004d99;
+      background: linear-gradient(135deg, rgba(0, 77, 153, 0.9), rgba(0, 102, 204, 0.85)),
+        url('https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940') no-repeat center center/cover;
       color: white;
-      padding: 2rem 1rem;
+      padding: 4rem 1rem;
       text-align: center;
-      border-bottom: 5px solid #0099ff;
+      border-radius: 0 0 30px 30px;
+      position: relative;
+      box-shadow: 0 5px 20px rgba(0, 77, 153, 0.2);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(0, 102, 204, 0.3), transparent);
+      z-index: 0;
+    }
+
+    .header .container {
+      position: relative;
+      z-index: 2;
     }
 
     .header h2 {
-      font-size: 1.8rem;
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      animation: fadeInDown 1s ease;
     }
 
     .header p {
-      font-size: 1rem;
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeInUp 1s ease 0.3s both;
     }
 
-    .table-wrapper {
+    /* Table Card Container */
+    .table-card {
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 1.75rem;
+      transition: var(--transition);
+      border: none;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+      animation: fadeIn 1s ease;
+    }
+
+    .table-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--primary);
+      opacity: 0.7;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .card-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    /* Enhanced Table */
+    .table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .table th,
+    .table td {
+      padding: 0.8rem;
+      vertical-align: middle;
+    }
+
+    .table thead {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: white;
+    }
+
+    .table thead th {
+      font-weight: 600;
+      border: none;
+      position: relative;
+    }
+
+    .table tbody tr {
+      transition: var(--transition);
+    }
+
+    .table tbody tr:hover {
+      background-color: rgba(0, 116, 217, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: rgba(0, 116, 217, 0.03);
+    }
+
+    /* Enhanced Search Bar */
+    .search-section {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(0, 116, 217, 0.1);
     }
 
     .search-bar {
-      flex-direction: column;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .search-input {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input .form-control {
+      padding-left: 2.5rem;
+      border-radius: 8px;
+      border: 1px solid #e0e6ed;
+      height: 48px;
+      font-size: 1rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+    }
+
+    .search-input .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(0, 116, 217, 0.15);
+    }
+
+    .search-input i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .export-btn {
+      background: linear-gradient(135deg, var(--success), #1e7e34);
+      border: none;
+      color: white;
+      font-weight: 500;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+    }
+
+    .export-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(40, 167, 69, 0.25);
+    }
+
+    /* Pagination */
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
       gap: 0.5rem;
     }
 
-    @media (min-width: 576px) {
+    .page-btn {
+      min-width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      margin: 0 3px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .page-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: 0 4px 8px rgba(0, 116, 217, 0.2);
+    }
+
+    .page-btn:hover:not(.active) {
+      background-color: var(--primary-light);
+      transform: translateY(-2px);
+    }
+
+    /* Loading Animation */
+    .loading-row td {
+      padding: 2rem !important;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    .loading-spinner {
+      width: 2rem;
+      height: 2rem;
+      margin: 0 auto;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.4;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .navbar-nav {
+        background-color: rgba(0, 77, 153, 0.97);
+        border-radius: 0 0 12px 12px;
+        padding: 1rem;
+        margin-top: 0.5rem;
+      }
+
+      .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .navbar-nav .nav-link.active::after {
+        display: none;
+      }
+
+      .header {
+        padding: 3rem 1rem;
+      }
+
+      .table-responsive {
+        border-radius: 8px;
+        overflow: hidden;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 2.5rem 1rem;
+        border-radius: 0 0 20px 20px;
+      }
+
+      .header h2 {
+        font-size: 1.8rem;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+      }
+
       .search-bar {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+        flex-direction: column;
+      }
+
+      .search-input,
+      .export-btn {
+        width: 100%;
+      }
+
+      .table-card {
+        padding: 1.25rem;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .header {
+        padding: 2rem 1rem;
+      }
+
+      .header h2 {
+        font-size: 1.5rem;
+      }
+
+      .header p {
+        font-size: 1rem;
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+      }
+
+      .table th,
+      .table td {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+      }
+
+      .page-btn {
+        min-width: 32px;
+        height: 32px;
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Animation Keyframes */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
       }
     }
   </style>
 </head>
-<body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
+<body>
+  <!-- Improved Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse-fill me-1"></i> Health Monitor</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <a class="navbar-brand" href="/">
+        <i class="bi bi-heart-pulse-fill text-danger"></i>
+        Health Monitor
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse mt-2 mt-lg-0" id="navbarNav">
+
+      <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
-          <li class="nav-item"><a class="nav-link active" href="/history">History</a></li>
-          <li class="nav-item"><a class="nav-link" href="/real-time-ecg">ECG Graph</a></li>
-          <li class="nav-item"><a class="nav-link active" href="/ai-prediction">AI Prediction</a></li>
-          <li class="nav-item"><a class="nav-link" href="/report-generator">AI Report</a></li>
-          <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/history">
+              <i class="bi bi-clock-history"></i> History
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/real-time-ecg">
+              <i class="bi bi-activity"></i> ECG Graph
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/ai-prediction">
+              <i class="bi bi-graph-up"></i> AI Prediction
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/report-generator">
+              <i class="bi bi-file-earmark-medical"></i> AI Report
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">
+              <i class="bi bi-info-circle"></i> About
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- Header -->
-  <div class="header">
-    <h2><i class="bi bi-journal-medical"></i> Patient History</h2>
-    <p>Last 100 entries from the database</p>
-  </div>
+  <!-- Enhanced Header Section -->
+  <section class="header">
+    <div class="container">
+      <h2 class="mb-3">
+        <i class="bi bi-clock-history"></i> Patient History
+      </h2>
+      <p class="lead">
+        View historical health data records with advanced filtering and export capabilities
+      </p>
+    </div>
+  </section>
 
-  <!-- Content -->
-  <div class="container py-4">
-    <div class="table-wrapper">
-      <div class="d-flex search-bar mb-3">
-        <input type="text" id="searchInput" class="form-control w-100 w-sm-50" placeholder="🔍 Search by Device ID">
-        <button class="btn btn-success ms-sm-3 mt-2 mt-sm-0" onclick="exportCSV()">
-          <i class="bi bi-file-earmark-arrow-down"></i> Export CSV
-        </button>
+  <!-- Content Section -->
+  <div class="container mb-5 animate__animated animate__fadeIn">
+    <div class="table-card">
+      <h5 class="card-title">
+        <i class="bi bi-database-fill me-2"></i>Health Monitoring Records
+      </h5>
+
+      <!-- Search and Filter Section -->
+      <div class="search-section animate__animated animate__fadeInUp">
+        <div class="search-bar">
+          <div class="search-input">
+            <i class="bi bi-search"></i>
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by Device ID...">
+          </div>
+          <button class="export-btn" onclick="exportCSV()">
+            <i class="bi bi-file-earmark-arrow-down"></i>
+            Export to CSV
+          </button>
+        </div>
       </div>
 
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped align-middle text-center">
-          <thead class="table-dark">
+      <!-- Table Section -->
+      <div class="table-responsive animate__animated animate__fadeInUp animate__delay-1s">
+        <table class="table table-striped">
+          <thead>
             <tr>
-              <th>Timestamp</th>
-              <th>Device ID</th>
-              <th>Pulse Rate</th>
-              <th>Temperature (°C)</th>
-              <th>ECG Value</th>
+              <th><i class="bi bi-calendar3 me-1"></i>Timestamp</th>
+              <th><i class="bi bi-upc-scan me-1"></i>Device ID</th>
+              <th><i class="bi bi-heart-pulse me-1"></i>Pulse Rate</th>
+              <th><i class="bi bi-thermometer-half me-1"></i>Temperature (°C)</th>
+              <th><i class="bi bi-activity me-1"></i>ECG Value</th>
             </tr>
           </thead>
           <tbody id="historyTable">
-            <tr><td colspan="5">⏳ Loading...</td></tr>
+            <tr class="loading-row">
+              <td colspan="5">
+                <div class="spinner-border loading-spinner" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading patient records...</p>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
 
+      <!-- Empty State (Initially Hidden) -->
+      <div id="emptyState" class="empty-state" style="display: none;">
+        <i class="bi bi-search"></i>
+        <h5>No matching records found</h5>
+        <p>Try adjusting your search criteria or clear the filters</p>
+      </div>
+
       <!-- Pagination Controls -->
-      <nav class="mt-3 d-flex justify-content-center" id="pagination"></nav>
+      <div id="pagination" class="pagination-container"></div>
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- Footer -->
+  <footer class="mt-5 py-4 text-center text-white" style="background: linear-gradient(135deg, #2c3e50, #1a252f); border-radius: 1.5rem 1.5rem 0 0;">
+    <div class="container">
+      <p>
+        &copy; 2025 IOT & AI Health Monitoring | Guided by Dr. Niketa Sharma | Project by Aarish, Aaditya, Anshuman & Ashmit
+      </p>
+    </div>
+  </footer>
+
+  <!-- Script -->
   <script>
     let allData = [];
     let currentPage = 1;
-    const rowsPerPage = 50;
+    const rowsPerPage = 10; // Changed from 50 to 10 for better mobile experience
+    let filteredData = [];
 
     async function fetchHistory() {
-      const res = await fetch('/all-data');
-      const data = await res.json();
-      allData = data;
-      displayPage(allData, currentPage);
-      setupPagination(allData);
+      try {
+        // Show loading state
+        document.getElementById('historyTable').innerHTML = `
+          <tr class="loading-row">
+            <td colspan="5">
+              <div class="spinner-border loading-spinner" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p class="mt-2">Loading patient records...</p>
+            </td>
+          </tr>
+        `;
+
+        // Fetch data
+        const res = await fetch('/all-data');
+        const data = await res.json();
+        allData = data;
+        filteredData = [...allData]; // Initialize filtered data with all data
+        
+        // Display first page of data
+        displayPage(filteredData, currentPage);
+        setupPagination(filteredData);
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        document.getElementById('historyTable').innerHTML = `
+          <tr>
+            <td colspan="5" class="text-center text-danger">
+              <i class="bi bi-exclamation-triangle-fill fs-3 mb-2"></i>
+              <p>Error loading data. Please try again later.</p>
+            </td>
+          </tr>
+        `;
+      }
     }
 
     function displayPage(data, page) {
       const tbody = document.getElementById('historyTable');
+      const emptyState = document.getElementById('emptyState');
       tbody.innerHTML = '';
+
+      if (data.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      } else {
+        emptyState.style.display = 'none';
+      }
 
       const start = (page - 1) * rowsPerPage;
       const end = start + rowsPerPage;
       const paginatedData = data.slice(start, end);
 
-      if (paginatedData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5">No matching results</td></tr>';
-        return;
-      }
+      paginatedData.forEach((entry, index) => {
+        // Format timestamp to a more readable format
+        const timestamp = new Date(entry.timestamp);
+        const formattedDate = timestamp.toLocaleString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
 
-      paginatedData.forEach(entry => {
-        const row = `
-          <tr>
-            <td>${entry.timestamp || '--'}</td>
-            <td>${entry.device_id || '--'}</td>
-            <td>${entry.pulse_value ?? '--'}</td>
-            <td>${entry.temperature ?? '--'}</td>
-            <td>${entry.ecg_value ?? '--'}</td>
-          </tr>`;
-        tbody.innerHTML += row;
+        // Create row with fade animation
+        const row = document.createElement('tr');
+        row.className = `animate__animated animate__fadeIn animate__delay-${index/10}s`;
+        
+        row.innerHTML = `
+          <td>${formattedDate || '--'}</td>
+          <td><span class="badge bg-info text-dark">${entry.device_id || '--'}</span></td>
+          <td>${entry.pulse_value ? `<span class="fw-bold">${entry.pulse_value}</span> BPM` : '--'}</td>
+          <td>${entry.temperature ? `<span class="fw-bold">${entry.temperature}</span> °C` : '--'}</td>
+          <td>${entry.ecg_value ?? '--'}</td>
+        `;
+        tbody.appendChild(row);
       });
     }
 
@@ -164,42 +664,159 @@
       pagination.innerHTML = '';
       const pageCount = Math.ceil(data.length / rowsPerPage);
 
-      for (let i = 1; i <= pageCount; i++) {
+      // Add previous button
+      if (pageCount > 1) {
+        const prevBtn = document.createElement('button');
+        prevBtn.className = `page-btn btn ${currentPage === 1 ? 'btn-light disabled' : 'btn-outline-primary'}`;
+        prevBtn.innerHTML = '<i class="bi bi-chevron-left"></i>';
+        prevBtn.addEventListener('click', () => {
+          if (currentPage > 1) {
+            currentPage--;
+            displayPage(data, currentPage);
+            setupPagination(data);
+          }
+        });
+        pagination.appendChild(prevBtn);
+      }
+
+      // Determine which page buttons to show
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(pageCount, startPage + 4);
+      
+      if (endPage - startPage < 4 && startPage > 1) {
+        startPage = Math.max(1, endPage - 4);
+      }
+
+      // Add page buttons
+      for (let i = startPage; i <= endPage; i++) {
         const btn = document.createElement('button');
-        btn.className = `btn btn-sm mx-1 ${i === currentPage ? 'btn-primary' : 'btn-outline-primary'}`;
+        btn.className = `page-btn btn ${i === currentPage ? 'active' : 'btn-outline-primary'}`;
         btn.innerText = i;
         btn.addEventListener('click', () => {
           currentPage = i;
           displayPage(data, currentPage);
           setupPagination(data);
+          // Scroll to top of table on page change
+          document.querySelector('.table-card').scrollIntoView({behavior: 'smooth'});
         });
         pagination.appendChild(btn);
       }
+
+      // Add next button
+      if (pageCount > 1) {
+        const nextBtn = document.createElement('button');
+        nextBtn.className = `page-btn btn ${currentPage === pageCount ? 'btn-light disabled' : 'btn-outline-primary'}`;
+        nextBtn.innerHTML = '<i class="bi bi-chevron-right"></i>';
+        nextBtn.addEventListener('click', () => {
+          if (currentPage < pageCount) {
+            currentPage++;
+            displayPage(data, currentPage);
+            setupPagination(data);
+          }
+        });
+        pagination.appendChild(nextBtn);
+      }
+
+      // Add data counter
+      const dataCounter = document.createElement('div');
+      dataCounter.className = 'mt-3 text-center text-muted';
+      dataCounter.innerHTML = `Showing ${Math.min(data.length, (currentPage - 1) * rowsPerPage + 1)} to ${Math.min(data.length, currentPage * rowsPerPage)} of ${data.length} records`;
+      pagination.appendChild(dataCounter);
     }
 
     function exportCSV() {
+      if (allData.length === 0) {
+        alert('No data available to export');
+        return;
+      }
+
+      // Create CSV content
       let csv = 'Timestamp,Device ID,Pulse Rate,Temperature (°C),ECG Value\n';
-      allData.forEach(entry => {
-        csv += `${entry.timestamp},${entry.device_id},${entry.pulse_value ?? ''},${entry.temperature ?? ''},${entry.ecg_value ?? ''}\n`;
+      
+      // Use filtered data if there is a filter applied, otherwise use all data
+      const dataToExport = filteredData.length < allData.length ? filteredData : allData;
+      
+      dataToExport.forEach(entry => {
+        const timestamp = new Date(entry.timestamp).toLocaleString();
+        csv += `"${timestamp}","${entry.device_id || ''}","${entry.pulse_value || ''}","${entry.temperature || ''}","${entry.ecg_value || ''}"\n`;
       });
+
+      // Create and trigger download
       const blob = new Blob([csv], { type: 'text/csv' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = 'patient_history.csv';
+      link.download = `health_records_${new Date().toISOString().split('T')[0]}.csv`;
+      
+      // Add animation to button
+      const exportBtn = document.querySelector('.export-btn');
+      exportBtn.classList.add('animate__animated', 'animate__pulse');
+      setTimeout(() => {
+        exportBtn.classList.remove('animate__animated', 'animate__pulse');
+      }, 1000);
+      
+      // Trigger download
       link.click();
     }
 
+    // Search functionality with debounce
+    let searchTimeout;
     document.getElementById("searchInput").addEventListener("input", function(e) {
-      const keyword = e.target.value.toLowerCase();
-      const filtered = allData.filter(d => d.device_id?.toLowerCase().includes(keyword));
-      currentPage = 1;
-      displayPage(filtered, currentPage);
-      setupPagination(filtered);
+      clearTimeout(searchTimeout);
+      
+      searchTimeout = setTimeout(() => {
+        const keyword = e.target.value.toLowerCase().trim();
+        
+        if (keyword === '') {
+          filteredData = [...allData];
+        } else {
+          filteredData = allData.filter(d => 
+            d.device_id?.toLowerCase().includes(keyword) ||
+            d.timestamp?.toLowerCase().includes(keyword)
+          );
+        }
+        
+        currentPage = 1;
+        displayPage(filteredData, currentPage);
+        setupPagination(filteredData);
+      }, 300); // Debounce delay
     });
 
+    // Initialize on load
     window.onload = fetchHistory;
+
+    // Show welcome message when data is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add scroll to top button
+      const scrollToTopBtn = document.createElement('button');
+      scrollToTopBtn.className = 'btn btn-primary position-fixed rounded-circle d-flex align-items-center justify-content-center';
+      scrollToTopBtn.style.bottom = '20px';
+      scrollToTopBtn.style.right = '20px';
+      scrollToTopBtn.style.width = '45px';
+      scrollToTopBtn.style.height = '45px';
+      scrollToTopBtn.style.opacity = '0';
+      scrollToTopBtn.style.transition = 'opacity 0.3s ease';
+      scrollToTopBtn.style.zIndex = '1000';
+      scrollToTopBtn.innerHTML = '<i class="bi bi-arrow-up"></i>';
+      
+      scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      });
+      
+      document.body.appendChild(scrollToTopBtn);
+      
+      // Show/hide scroll button based on scroll position
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          scrollToTopBtn.style.opacity = '1';
+        } else {
+          scrollToTopBtn.style.opacity = '0';
+        }
+      });
+    });
   </script>
 
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

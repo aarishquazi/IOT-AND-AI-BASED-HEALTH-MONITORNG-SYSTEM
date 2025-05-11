@@ -1,171 +1,726 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About | IOT AND AI BASED HEALTH MONITORING SYSTEM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | Health Monitor</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Animate.css for animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <style>
+    :root {
+      --primary: #0074d9;
+      --primary-dark: #004d99;
+      --primary-light: #e9f5ff;
+      --secondary: #004085;
+      --accent: #ff6b6b;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --dark: #343a40;
+      --light: #f8f9fa;
+      --text-dark: #343a40;
+      --text-light: #f8f9fa;
+      --text-muted: #6c757d;
+      --border-radius: 12px;
+      --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
     body {
-      background-color: #f4f9ff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fbff;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      scroll-behavior: smooth;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
+    main {
+      flex: 1;
+    }
+
+    /* Improved Navbar */
     .navbar {
-      background-color: #004d99;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 0.75rem 1rem;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
     }
 
-    .navbar-brand, .nav-link {
+    .navbar-brand {
       color: white !important;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
 
-    .navbar-brand:hover, .nav-link:hover {
-      color: #d9e1e8 !important;
+    .navbar-nav .nav-link {
+      color: rgba(255, 255, 255, 0.9) !important;
+      font-weight: 500;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      transition: var(--transition);
+      margin: 0 2px;
     }
 
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      color: white !important;
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .navbar-nav .nav-link.active {
+      position: relative;
+    }
+
+    .navbar-nav .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 3px;
+      background-color: white;
+      border-radius: 3px;
+    }
+
+    /* Enhanced Header Section */
     .header {
-      background-color: #004d99;
+      background: linear-gradient(135deg, rgba(0, 77, 153, 0.9), rgba(0, 102, 204, 0.85)),
+        url('https://images.pexels.com/photos/4226119/pexels-photo-4226119.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750') no-repeat center center/cover;
       color: white;
+      padding: 4rem 1rem;
       text-align: center;
-      padding: 2rem 1rem;
-      border-bottom: 5px solid #0099ff;
+      border-radius: 0 0 30px 30px;
+      position: relative;
+      box-shadow: 0 5px 20px rgba(0, 77, 153, 0.2);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(0, 102, 204, 0.3), transparent);
+      z-index: 0;
+    }
+
+    .header .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .header h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      animation: fadeInDown 1s ease;
+    }
+
+    .header p {
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeInUp 1s ease 0.3s both;
+    }
+
+    /* Section Styling */
+    .section-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .section-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .section-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--primary);
+      opacity: 0.7;
     }
 
     .section-title {
       font-size: 1.8rem;
-      font-weight: bold;
-      margin-bottom: 20px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
     }
 
     .section-content {
       font-size: 1.1rem;
-      max-width: 900px;
-      margin: 0 auto 40px auto;
       line-height: 1.7;
+      color: var(--text-dark);
     }
 
-    .card-mentor, .card-member {
-      border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-      background-color: white;
+    /* Team Cards */
+    .team-section {
+      margin-top: 3rem;
     }
 
-    .footer {
-      background-color: #f1f1f1;
-      padding: 20px;
+    .mentor-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 1.75rem;
       text-align: center;
-      font-size: 0.9rem;
+      transition: var(--transition);
+      border: none;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
     }
 
-    .icon-title {
-      color: #004d99;
-      margin-right: 8px;
+    .mentor-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 5px 5px 0 0;
+    }
+
+    .mentor-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .mentor-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--primary);
+    }
+
+    .mentor-name {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--primary-dark);
+    }
+
+    .mentor-title {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .team-member-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 1.5rem;
+      text-align: center;
+      transition: var(--transition);
+      height: 100%;
+      border: none;
+    }
+
+    .team-member-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .member-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .member-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--text-dark);
+    }
+
+    .member-role {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Institution Card */
+    .institution-card {
+      background: linear-gradient(135deg, #fff, #f8faff);
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .institution-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    /* Features */
+    .features-section {
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 1.5rem;
+      height: 100%;
+      transition: var(--transition);
+      border: none;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text-dark);
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #2c3e50, #1a252f);
+      color: white;
+      padding: 1.5rem 0;
+      width: 100%;
+      margin-top: auto;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .navbar-nav {
+        background-color: rgba(0, 77, 153, 0.97);
+        border-radius: 0 0 12px 12px;
+        padding: 1rem;
+        margin-top: 0.5rem;
+      }
+      
+      .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.25rem;
+      }
+      
+      .navbar-nav .nav-link.active::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 3rem 1rem;
+        border-radius: 0 0 20px 20px;
+      }
+      
+      .header h2 {
+        font-size: 1.8rem;
+      }
+      
+      .header p {
+        font-size: 1.1rem;
+      }
+      
+      .section-title {
+        font-size: 1.5rem;
+      }
+      
+      .section-card {
+        padding: 1.5rem;
+      }
+      
+      .mentor-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+      }
+      
+      .mentor-name {
+        font-size: 1.3rem;
+      }
+      
+      .member-avatar {
+        width: 70px;
+        height: 70px;
+        font-size: 1.75rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .header {
+        padding: 2.5rem 1rem;
+      }
+      
+      .header h2 {
+        font-size: 1.6rem;
+      }
+      
+      .header p {
+        font-size: 1rem;
+      }
+      
+      .section-title {
+        font-size: 1.4rem;
+      }
+      
+      .section-content {
+        font-size: 1rem;
+      }
+      
+      .section-card {
+        padding: 1.25rem;
+      }
+      
+      .mentor-avatar {
+        width: 90px;
+        height: 90px;
+        font-size: 2.25rem;
+      }
+      
+      .mentor-name {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Animation Keyframes */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
+
 <body>
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-  <div class="container">
-      <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse-fill me-1"></i> Health Monitor</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
+  <!-- Improved Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <i class="bi bi-heart-pulse-fill text-danger"></i>
+        Health Monitor
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse mt-2 mt-lg-0" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-              <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
-              <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
-              <li class="nav-item"><a class="nav-link active" href="/real-time-ecg">ECG Graph</a></li>
-              <li class="nav-item"><a class="nav-link" href="/ai-prediction">AI Prediction</a></li>
-              <li class="nav-item"><a class="nav-link" href="/report-generator">AI Report</a></li>
-              <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-          </ul>
-      </div>
-  </div>
-</nav>
 
-<!-- Header -->
-<div class="header">
-  <h1>IOT AND AI BASED HEALTH MONITORING SYSTEM</h1>
-  <p class="lead">Real-time health monitoring using advanced sensor data and AI</p>
-</div>
-
-<!-- Content -->
-<div class="container py-5">
-
-  <!-- Project Overview -->
-  <div class="section-title text-center">
-    <i class="bi bi-info-circle icon-title"></i> About the Project
-  </div>
-  <div class="section-content">
-    <p>The IOT and AI Based Health Monitoring System aims to revolutionize healthcare by providing real-time monitoring of critical health parameters such as ECG, Pulse Rate, and Temperature. This project utilizes Internet of Things (IoT) devices to gather sensor data and uses Artificial Intelligence (AI) to predict abnormal conditions, allowing healthcare providers to take timely actions for better patient outcomes.</p>
-    <p>The system bridges the gap between remote monitoring and clinical practices by integrating hardware sensors with advanced machine learning models. It classifies ECG data, tracks vitals, and delivers accurate insights to healthcare professionals.</p>
-  </div>
-
-  <!-- Mentor Section -->
-  <div class="section-title text-center">
-    <i class="bi bi-person-badge icon-title"></i> Project Mentor
-  </div>
-  <div class="row justify-content-center mb-5">
-    <div class="col-md-6 col-lg-4">
-      <div class="card card-mentor p-4 text-center">
-        <h5>Dr. Niketa Sharma</h5>
-        <p class="text-muted">Associate Professor, Computer Science</p>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/history">
+              <i class="bi bi-clock-history"></i> History
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/real-time-ecg">
+              <i class="bi bi-activity"></i> ECG Graph
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/ai-prediction">
+              <i class="bi bi-graph-up"></i> AI Prediction
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/report-generator">
+              <i class="bi bi-file-earmark-medical"></i> AI Report
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/about">
+              <i class="bi bi-info-circle"></i> About
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
-  </div>
+  </nav>
 
-  <!-- Team Members -->
-  <div class="section-title text-center">
-    <i class="bi bi-people icon-title"></i> Project Team Members
-  </div>
-  <div class="row text-center g-4 mb-5">
-    <div class="col-md-3 col-sm-6">
-      <div class="card card-member p-3">
-        <h6>Aarish Quazi</h6>
-        <p class="text-muted mb-0">Project Leader</p>
+  <main>
+    <!-- Enhanced Header Section -->
+    <section class="header">
+      <div class="container">
+        <h2 class="mb-3">
+          <i class="bi bi-info-circle-fill"></i> About Our Project
+        </h2>
+        <p class="lead">
+          IOT AND AI BASED HEALTH MONITORING SYSTEM: Revolutionizing healthcare with real-time monitoring and AI predictions
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container mb-5">
+      <!-- Project Overview Section -->
+      <div class="section-card animate__animated animate__fadeIn">
+        <h3 class="section-title">
+          <i class="bi bi-info-circle me-2"></i>Project Overview
+        </h3>
+        <div class="section-content">
+          <p>The IOT and AI Based Health Monitoring System aims to revolutionize healthcare by providing real-time monitoring of critical health parameters such as ECG, Pulse Rate, and Temperature. This project utilizes Internet of Things (IoT) devices to gather sensor data and uses Artificial Intelligence (AI) to predict abnormal conditions, allowing healthcare providers to take timely actions for better patient outcomes.</p>
+          <p>The system bridges the gap between remote monitoring and clinical practices by integrating hardware sensors with advanced AI models. It classifies ECG data, tracks vitals, and delivers accurate insights to healthcare professionals.</p>
+        </div>
+      </div>
+
+      <!-- Key Features -->
+      <div class="section-card animate__animated animate__fadeIn">
+        <h3 class="section-title">
+          <i class="bi bi-grid-3x3-gap me-2"></i>Key Features
+        </h3>
+        <div class="row g-4 mt-3">
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-heart-pulse"></i>
+              </div>
+              <h5 class="feature-title">Real-time ECG Monitoring</h5>
+              <p>Continuous tracking and visualization of electrocardiogram data with instant updates</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-cpu"></i>
+              </div>
+              <h5 class="feature-title">AI-Powered Analysis</h5>
+              <p>Advanced machine learning algorithms to detect abnormalities in health parameters</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-cloud-arrow-up"></i>
+              </div>
+              <h5 class="feature-title">Cloud Integration</h5>
+              <p>Secure data storage and access from anywhere through robust cloud infrastructure</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-bell"></i>
+              </div>
+              <h5 class="feature-title">Alert System</h5>
+              <p>Instant notifications for critical conditions requiring immediate attention</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-file-earmark-medical"></i>
+              </div>
+              <h5 class="feature-title">Automated Reports</h5>
+              <p>AI-generated comprehensive health reports with personalized insights</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-database"></i>
+              </div>
+              <h5 class="feature-title">Saving Past Vitals</h5>
+              <p>Historical data storage from AD8232 ECG sensor, pulse rate monitor, and LM35 temperature sensor</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mentor Section -->
+      <div class="section-card animate__animated animate__fadeIn">
+        <h3 class="section-title">
+          <i class="bi bi-person-badge me-2"></i>Project Mentor
+        </h3>
+        <div class="row justify-content-center">
+          <div class="col-md-6 col-lg-5">
+            <div class="mentor-card">
+              <div class="mentor-avatar">
+                <i class="bi bi-person"></i>
+              </div>
+              <h4 class="mentor-name">Dr. Niketa Sharma</h4>
+              <p class="mentor-title">Associate Professor, Computer Science</p>
+              <p class="mt-3">Expert in AI, IoT applications and healthcare informatics with experience in research projects.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Members -->
+      <div class="section-card animate__animated animate__fadeIn">
+        <h3 class="section-title">
+          <i class="bi bi-people me-2"></i>Project Team
+        </h3>
+        <div class="row g-4 mt-2">
+          <div class="col-md-6 col-lg-3">
+            <div class="team-member-card">
+              <div class="member-avatar">
+                <i class="bi bi-person"></i>
+              </div>
+              <h5 class="member-name">Aarish Quazi</h5>
+              <p class="member-role">Project Leader</p>
+              <p class="mt-2">Coordinating project development and implementing system architecture</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="team-member-card">
+              <div class="member-avatar">
+                <i class="bi bi-person"></i>
+              </div>
+              <h5 class="member-name">Aaditya Kaushik</h5>
+              <p class="member-role">AI & Backend Developer</p>
+              <p class="mt-2">Developing AI models and server-side infrastructure</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="team-member-card">
+              <div class="member-avatar">
+                <i class="bi bi-person"></i>
+              </div>
+              <h5 class="member-name">Anshuman Singh Sikarwar</h5>
+              <p class="member-role">Cloud Integration</p>
+              <p class="mt-2">Managing cloud services and real-time data processing pipelines</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="team-member-card">
+              <div class="member-avatar">
+                <i class="bi bi-person"></i>
+              </div>
+              <h5 class="member-name">Ashmit Kumar Kurmi</h5>
+              <p class="member-role">Hardware & Sensors</p>
+              <p class="mt-2">Designing and integrating IoT sensors and hardware components</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Institution Information -->
+      <div class="section-card animate__animated animate__fadeIn">
+        <h3 class="section-title">
+          <i class="bi bi-building me-2"></i>About SKIT
+        </h3>
+        <div class="institution-card mt-4">
+          <div class="row align-items-center">
+            <div class="col-md-3 text-center mb-4 mb-md-0">
+              <i class="bi bi-building" style="font-size: 5rem; color: var(--primary);"></i>
+            </div>
+            <div class="col-md-9">
+              <h4>Swami Keshvanand Institute of Technology</h4>
+              <p class="section-content">
+                SKIT, located in Jaipur, Rajasthan, is one of the leading engineering institutions in India. Known for its world-class infrastructure and academic excellence, SKIT offers a wide range of undergraduate and postgraduate programs. It promotes innovation, research, and industry-oriented learning.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-md-3 col-sm-6">
-      <div class="card card-member p-3">
-        <h6>Aaditya Kaushik</h6>
-        <p class="text-muted mb-0">AI & Backend Developer</p>
-      </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-3 text-center">
+    <div class="container">
+      <p class="mb-0">
+        &copy; 2025 IOT & AI Health Monitoring | Guided by Dr. Niketa Sharma | Project by Aarish, Aaditya, Anshuman & Ashmit
+      </p>
     </div>
-    <div class="col-md-3 col-sm-6">
-      <div class="card card-member p-3">
-        <h6>Anshuman Singh Sikarwar</h6>
-        <p class="text-muted mb-0">Cloud Integration</p>
-      </div>
-    </div>
-    <div class="col-md-3 col-sm-6">
-      <div class="card card-member p-3">
-        <h6>Ashmit Kumar Kurmi</h6>
-        <p class="text-muted mb-0">Hardware & Sensors</p>
-      </div>
-    </div>
-  </div>
+  </footer>
 
-  <!-- SKIT Info -->
-  <div class="section-title text-center">
-    <i class="bi bi-building icon-title"></i> About Swami Keshvanand Institute of Technology
-  </div>
-  <div class="section-content">
-    <p>Swami Keshvanand Institute of Technology (SKIT), located in Jaipur, Rajasthan, is one of the leading engineering institutions in India. Known for its world-class infrastructure and academic excellence, SKIT offers a wide range of undergraduate and postgraduate programs. It promotes innovation, research, and industry-oriented learning.</p>
-    <p>The institute supports student-led initiatives like this health monitoring project and fosters interdisciplinary collaboration that prepares students to face real-world challenges in healthcare, AI, and IoT.</p>
-  </div>
-
-</div>
-
-<!-- Footer -->
-<div class="footer">
-  &copy; 2025 IOT & AI Health Monitoring | Guided by Dr. Niketa Sharma | Project by Aarish, Aaditya, Anshuman & Ashmit
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

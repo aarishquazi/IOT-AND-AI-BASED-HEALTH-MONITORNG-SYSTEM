@@ -1,139 +1,731 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI-Based ECG Prediction</title>
 
-  <!-- Bootstrap & Icons -->
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Animate.css for animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <style>
+    :root {
+      --primary: #0074d9;
+      --primary-dark: #004d99;
+      --primary-light: #e9f5ff;
+      --secondary: #004085;
+      --accent: #ff6b6b;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --dark: #343a40;
+      --light: #f8f9fa;
+      --text-dark: #343a40;
+      --text-light: #f8f9fa;
+      --text-muted: #6c757d;
+      --border-radius: 12px;
+      --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
     body {
-      background-color: #f7fafd;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fbff;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      scroll-behavior: smooth;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      /* Full viewport height */
     }
 
+    main {
+      flex: 1;
+      /* Takes up available space, pushing footer down */
+    }
+
+    /* Improved Navbar */
     .navbar {
-      background-color: #004d99;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 0.75rem 1rem;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
     }
 
-    .navbar-brand, .nav-link {
+    .navbar-brand {
       color: white !important;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
 
+    .navbar-nav .nav-link {
+      color: rgba(255, 255, 255, 0.9) !important;
+      font-weight: 500;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      transition: var(--transition);
+      margin: 0 2px;
+    }
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      color: white !important;
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .navbar-nav .nav-link.active {
+      position: relative;
+    }
+
+    .navbar-nav .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 3px;
+      background-color: white;
+      border-radius: 3px;
+    }
+
+    /* Enhanced Header Section */
     .header {
-      background-color: #004d99;
+      background: linear-gradient(135deg, rgba(0, 77, 153, 0.9), rgba(0, 102, 204, 0.85)),
+        url('https://images.pexels.com/photos/4226119/pexels-photo-4226119.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750') no-repeat center center/cover;
       color: white;
+      padding: 4rem 1rem;
       text-align: center;
-      padding: 2rem 1rem;
-      border-bottom: 5px solid #0099ff;
+      border-radius: 0 0 30px 30px;
+      position: relative;
+      box-shadow: 0 5px 20px rgba(0, 77, 153, 0.2);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(0, 102, 204, 0.3), transparent);
+      z-index: 0;
+    }
+
+    .header .container {
+      position: relative;
+      z-index: 2;
     }
 
     .header h2 {
-      font-size: 1.8rem;
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      animation: fadeInDown 1s ease;
     }
 
-    .card {
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    .header p {
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeInUp 1s ease 0.3s both;
+    }
+
+    /* Upload Card */
+    .upload-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 1.75rem;
+      transition: var(--transition);
+      border: none;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .upload-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--primary);
+      opacity: 0.7;
+    }
+
+    .upload-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .card-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .form-control {
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      border: 1px solid #e0e6ed;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(0, 116, 217, 0.15);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(0, 116, 217, 0.2);
+      transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 116, 217, 0.25);
+      background: linear-gradient(135deg, var(--primary), #0066cc);
+    }
+
+    /* Result Card */
+    .result-card {
       background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 1.75rem;
+      transition: var(--transition);
+      display: none;
+      animation: fadeIn 0.5s ease;
+      margin-top: 1.5rem;
     }
 
-    #resultBox .alert {
-      font-size: 1rem;
+    .result-normal {
+      border-left: 6px solid var(--success);
+    }
+
+    .result-abnormal {
+      border-left: 6px solid var(--danger);
+    }
+
+    /* Preview Section */
+    .preview-container {
+      text-align: center;
+      margin: 1.5rem 0;
+      display: none;
+    }
+
+    #imagePreview {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    .loading-spinner {
+      width: 3rem;
+      height: 3rem;
+      color: var(--primary);
+    }
+
+    .loading p {
+      margin-top: 1rem;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* Progress Bar Animation */
+    .progress {
+      height: 10px;
+      border-radius: 5px;
+      margin-top: 1rem;
+      background-color: #e9ecef;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+      transition: width 0.4s ease;
+      border-radius: 5px;
+    }
+
+    /* Result Icons */
+    .result-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      animation: pulse 1.5s infinite;
+    }
+
+    .result-normal .result-icon {
+      color: var(--success);
+    }
+
+    .result-abnormal .result-icon {
+      color: var(--danger);
+    }
+
+    /* File Input Custom Styling */
+    .file-upload {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    .file-upload-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      border: 2px dashed #cfd8dc;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background-color: #f8fafc;
+    }
+
+    .file-upload-label:hover {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+
+    .file-upload-label i {
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+      color: var(--primary);
+    }
+
+    .file-upload input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-name {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Confidence Meter */
+    .confidence-meter {
+      margin-top: 1rem;
+    }
+
+    .confidence-value {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    /* Animation Keyframes */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Result Details Table */
+    .result-details {
+      margin-top: 1.5rem;
+      border-top: 1px solid #e9ecef;
+      padding-top: 1.5rem;
+    }
+
+    .result-details-table {
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .result-details-table td {
+      padding: 0.5rem;
+    }
+
+    .result-details-table td:first-child {
+      font-weight: 500;
+      width: 40%;
+    }
+
+    /* Error Alert */
+    .error-alert {
+      display: none;
+      background-color: #fff1f0;
+      border-left: 4px solid var(--danger);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+
+    /* Footer Styling - Fixed at bottom */
+    footer {
+      background: linear-gradient(135deg, #2c3e50, #1a252f);
+      color: white;
+      padding: 1.5rem 0;
+      width: 100%;
+      margin-top: auto;
+      /* Push to bottom of flex container */
+    }
+
+    /* Enhanced Responsive Design */
+    @media (max-width: 992px) {
+      .navbar-nav {
+        background-color: rgba(0, 77, 153, 0.97);
+        border-radius: 0 0 12px 12px;
+        padding: 1rem;
+        margin-top: 0.5rem;
+      }
+
+      .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .navbar-nav .nav-link.active::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 3rem 1rem;
+        border-radius: 0 0 20px 20px;
+      }
+
+      .header h2 {
+        font-size: 1.8rem;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+      }
+
+      .upload-card {
+        padding: 1.5rem;
+      }
+
+      .result-icon {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .header {
+        padding: 2.5rem 1rem;
+      }
+
+      .header h2 {
+        font-size: 1.6rem;
+      }
+
+      .header p {
+        font-size: 1rem;
+      }
+
+      .upload-card {
+        padding: 1.25rem;
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+      }
+
+      .btn-primary {
+        padding: 0.6rem 1rem;
+      }
     }
   </style>
 </head>
-<body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
+<body>
+  <!-- Improved Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse-fill me-1"></i> Health Monitor</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <a class="navbar-brand" href="/">
+        <i class="bi bi-heart-pulse-fill text-danger"></i>
+        Health Monitor
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse mt-2 mt-lg-0" id="navbarNav">
+
+      <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
-          <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
-          <li class="nav-item"><a class="nav-link" href="/real-time-ecg">ECG Graph</a></li>
-          <li class="nav-item"><a class="nav-link active" href="/ai-prediction">AI Prediction</a></li>
-          <li class="nav-item"><a class="nav-link" href="/report-generator">AI Report</a></li>
-          <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/history">
+              <i class="bi bi-clock-history"></i> History
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/real-time-ecg">
+              <i class="bi bi-activity"></i> ECG Graph
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/ai-prediction">
+              <i class="bi bi-graph-up"></i> AI Prediction
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/report-generator">
+              <i class="bi bi-file-earmark-medical"></i> AI Report
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">
+              <i class="bi bi-info-circle"></i> About
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- Header -->
-  <div class="header">
-    <h2><i class="bi bi-cpu"></i> AI-Based ECG Prediction</h2>
-    <p>Upload an ECG image and let AI predict the result</p>
-  </div>
+  <main>
+    <!-- Enhanced Header Section -->
+    <section class="header">
+      <div class="container">
+        <h2 class="mb-3">
+          <i class="bi bi-cpu"></i> AI-Based ECG Prediction
+        </h2>
+        <p class="lead">
+          Upload an ECG image and let our advanced AI analyze and predict cardiac patterns with high accuracy
+        </p>
+      </div>
+    </section>
 
-  <!-- Content -->
-  <div class="container py-4">
-    <div class="row justify-content-center">
-      <div class="col-lg-6 col-md-8">
-        <div class="card p-4">
-          <h5 class="text-center mb-3"><i class="bi bi-upload"></i> Upload ECG Image</h5>
-          <input type="file" class="form-control mb-3" id="imageInput" accept="image/*">
-          <button class="btn btn-primary w-100" onclick="predictECGImage()">
-            <i class="bi bi-robot"></i> Predict
-          </button>
-          <div id="resultBox" class="mt-4 text-center"></div>
+    <!-- Main Content -->
+    <div class="container mb-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 animate__animated animate__fadeIn">
+          <div class="upload-card">
+            <h5 class="card-title">
+              <i class="bi bi-upload me-2"></i>Upload ECG Image
+            </h5>
+
+            <form id="ecgForm" enctype="multipart/form-data">
+              <div class="file-upload">
+                <label class="file-upload-label" for="imageInput">
+                  <i class="bi bi-file-earmark-medical"></i>
+                  <span>Drop ECG image here or click to browse</span>
+                </label>
+                <input type="file" id="imageInput" name="file" accept="image/*" onchange="previewImage(this)">
+                <div class="file-name" id="fileName"></div>
+              </div>
+
+              <div class="preview-container" id="previewContainer">
+                <img id="imagePreview" alt="ECG Preview">
+              </div>
+
+              <button type="button" class="btn btn-primary w-100" id="predictButton" onclick="predictECGImage()">
+                <i class="bi bi-cpu me-2"></i>Analyze ECG with AI
+              </button>
+            </form>
+
+            <div id="loading" class="loading my-4">
+              <div class="spinner-border loading-spinner" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p>Analyzing ECG patterns...</p>
+              <div class="progress">
+                <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div class="result-card" id="resultCard">
+              <div class="text-center">
+                <i class="bi bi-heart-pulse result-icon" id="resultIcon"></i>
+                <h5 id="resultTitle">ECG Analysis Result</h5>
+                <p id="resultDescription">The AI has analyzed your ECG image.</p>
+                <div class="confidence-meter">
+                  <span>Confidence Level:</span>
+                  <span class="confidence-value" id="confidenceValue">--</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-3 text-center">
+    <div class="container">
+      <p class="mb-0">
+        &copy; 2025 IOT & AI Health Monitoring | Guided by Dr. Niketa Sharma | Project by Aarish, Aaditya, Anshuman &
+        Ashmit
+      </p>
+    </div>
+  </footer>
 
   <!-- Script -->
   <script>
+    function previewImage(input) {
+      const previewContainer = document.getElementById('previewContainer');
+      const imagePreview = document.getElementById('imagePreview');
+      const fileName = document.getElementById('fileName');
+
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          imagePreview.src = e.target.result;
+          previewContainer.style.display = 'block';
+          fileName.textContent = input.files[0].name;
+        };
+
+        reader.readAsDataURL(input.files[0]);
+
+        // Reset previous results
+        document.getElementById('resultCard').style.display = 'none';
+      }
+    }
+
+    function simulateProgress() {
+      const progressBar = document.getElementById('progressBar');
+      let width = 0;
+      const interval = setInterval(() => {
+        if (width >= 90) {
+          clearInterval(interval);
+        } else {
+          width += 5;
+          progressBar.style.width = width + '%';
+        }
+      }, 150);
+    }
+
     async function predictECGImage() {
       const fileInput = document.getElementById('imageInput');
-      const resultBox = document.getElementById('resultBox');
-      resultBox.innerHTML = '';
+      const loading = document.getElementById('loading');
+      const resultCard = document.getElementById('resultCard');
+      const progressBar = document.getElementById('progressBar');
+
+      // Reset previous results
+      resultCard.style.display = 'none';
+      progressBar.style.width = '0%';
 
       if (!fileInput.files.length) {
-        resultBox.innerHTML = `<div class="alert alert-warning">⚠️ Please select an ECG image.</div>`;
+        alert('Please select an ECG image first');
         return;
       }
+
+      // Show loading state
+      loading.style.display = 'block';
+      simulateProgress();
 
       const formData = new FormData();
       formData.append('file', fileInput.files[0]);
 
-      // Show loading spinner
-      resultBox.innerHTML = `
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-2 text-muted">Predicting...</p>
-      `;
-
       try {
+        // Actual API call
         const res = await fetch('/predict-ecg-image', {
           method: 'POST',
           body: formData
         });
         const data = await res.json();
 
-        const color = data.result === 'Normal' ? 'success' : 'danger';
-        resultBox.innerHTML = `
-          <div class="alert alert-${color}">
-            <h6 class="mb-2">🧠 Prediction Result:</h6>
-            <strong>${data.result}</strong><br>
-            Confidence: <strong>${(data.probability * 100).toFixed(2)}%</strong>
-          </div>
-        `;
+        // Complete progress bar
+        progressBar.style.width = '100%';
+
+        // Small delay to show completed progress
+        setTimeout(() => {
+          // Hide loading
+          loading.style.display = 'none';
+
+          // Update result elements
+          const resultIcon = document.getElementById('resultIcon');
+          const resultTitle = document.getElementById('resultTitle');
+          const resultDescription = document.getElementById('resultDescription');
+          const confidenceValue = document.getElementById('confidenceValue');
+
+          // Display the exact result from the model
+          resultTitle.textContent = data.result;
+          confidenceValue.textContent = `${(data.probability * 100).toFixed(1)}%`;
+
+          // Adjust icon and styling based on result (while maintaining dynamic result text)
+          if (data.result.toLowerCase().includes('abnormal')) {
+            resultIcon.className = 'bi bi-exclamation-triangle result-icon';
+            resultCard.className = 'result-card result-abnormal animate__animated animate__fadeIn';
+            resultDescription.textContent = 'The AI has analyzed your ECG image. This is not a medical diagnosis. Please consult with a healthcare professional.';
+          } else {
+            resultIcon.className = 'bi bi-heart-pulse result-icon';
+            resultCard.className = 'result-card result-normal animate__animated animate__fadeIn';
+            resultDescription.textContent = 'The AI has analyzed your ECG image. This is not a medical diagnosis. Please consult with a healthcare professional.';
+          }
+
+          // Show result card
+          resultCard.style.display = 'block';
+        }, 500);
+
       } catch (error) {
-        resultBox.innerHTML = `<div class="alert alert-danger">❌ Error processing image. Please try again.</div>`;
+        // Hide loading
+        loading.style.display = 'none';
+        alert('Error processing image. Please try again.');
+        console.error('Error:', error);
       }
     }
   </script>
 
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

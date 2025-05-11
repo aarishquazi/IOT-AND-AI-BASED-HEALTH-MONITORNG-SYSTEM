@@ -1,149 +1,506 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Health Report Generator</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Animate.css for animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <style>
+    :root {
+      --primary: #0074d9;
+      --primary-dark: #004d99;
+      --primary-light: #e9f5ff;
+      --secondary: #004085;
+      --accent: #ff6b6b;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --dark: #343a40;
+      --light: #f8f9fa;
+      --text-dark: #343a40;
+      --text-light: #f8f9fa;
+      --text-muted: #6c757d;
+      --border-radius: 12px;
+      --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
     body {
-      background-color: #f4f9ff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fbff;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      scroll-behavior: smooth;
     }
 
+    /* Improved Navbar */
     .navbar {
-      background-color: #004d99;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 0.75rem 1rem;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
     }
 
-    .navbar-brand, .nav-link {
+    .navbar-brand {
       color: white !important;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
 
-    .navbar-toggler {
-      border: none;
+    .navbar-nav .nav-link {
+      color: rgba(255, 255, 255, 0.9) !important;
+      font-weight: 500;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      transition: var(--transition);
+      margin: 0 2px;
     }
 
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      color: white !important;
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .navbar-nav .nav-link.active {
+      position: relative;
+    }
+
+    .navbar-nav .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 3px;
+      background-color: white;
+      border-radius: 3px;
+    }
+
+    /* Enhanced Header Section */
     .header {
-      background-color: #004d99;
+      background: linear-gradient(135deg, rgba(0, 77, 153, 0.9), rgba(0, 102, 204, 0.85)),
+        url('https://images.pexels.com/photos/5407251/pexels-photo-5407251.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940') no-repeat center center/cover;
       color: white;
-      padding: 2rem 1rem;
+      padding: 4rem 1rem;
       text-align: center;
+      border-radius: 0 0 30px 30px;
+      position: relative;
+      box-shadow: 0 5px 20px rgba(0, 77, 153, 0.2);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(0, 102, 204, 0.3), transparent);
+      z-index: 0;
+    }
+
+    .header .container {
+      position: relative;
+      z-index: 2;
     }
 
     .header h2 {
-      font-size: 1.8rem;
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      animation: fadeInDown 1s ease;
     }
 
     .header p {
-      font-size: 1rem;
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeInUp 1s ease 0.3s both;
     }
 
-    .card {
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    /* Form and Report Cards */
+    .input-card, .output-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 1.75rem;
+      transition: var(--transition);
+      border: none;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
     }
 
-    .report-section {
-      background-color: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    .input-card::before, .output-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--primary);
+      opacity: 0.7;
     }
 
+    .input-card:hover, .output-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .card-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      border: 1px solid #e0e6ed;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(0, 116, 217, 0.15);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(0, 116, 217, 0.2);
+      transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 116, 217, 0.25);
+      background: linear-gradient(135deg, var(--primary), #0066cc);
+    }
+
+    /* Loading Animation */
     .loading {
       display: none;
       text-align: center;
+      padding: 1.5rem;
     }
 
     .loading-spinner {
       width: 3rem;
       height: 3rem;
+      color: var(--primary);
     }
 
-    .form-label i {
-      margin-right: 6px;
+    .loading p {
+      margin-top: 1rem;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* Report Content */
+    .report-content {
+      min-height: 100px;
+    }
+
+    .alert-success {
+      background-color: #e8f8f2;
+      border-color: #d4edda;
+      color: #155724;
+      border-radius: 10px;
+    }
+
+    .alert-danger {
+      background-color: #fff2f2;
+      border-color: #ffdddd;
+      border-radius: 10px;
+    }
+
+    .patient-info {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .timestamp {
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      color: var(--text-muted);
+    }
+
+    /* Animation Keyframes */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Enhanced Responsive Design */
+    @media (max-width: 992px) {
+      .navbar-nav {
+        background-color: rgba(0, 77, 153, 0.97);
+        border-radius: 0 0 12px 12px;
+        padding: 1rem;
+        margin-top: 0.5rem;
+      }
+      
+      .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.25rem;
+      }
+      
+      .navbar-nav .nav-link.active::after {
+        display: none;
+      }
+      
+      .output-card {
+        margin-top: 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 3rem 1rem;
+        border-radius: 0 0 20px 20px;
+      }
+      
+      .header h2 {
+        font-size: 1.8rem;
+      }
+      
+      .header p {
+        font-size: 1.1rem;
+      }
+      
+      .card-title {
+        font-size: 1.2rem;
+      }
+      
+      .input-card, .output-card {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .header {
+        padding: 2.5rem 1rem;
+      }
+      
+      .header h2 {
+        font-size: 1.6rem;
+      }
+      
+      .header p {
+        font-size: 1rem;
+      }
+      
+      .input-card, .output-card {
+        padding: 1.25rem;
+      }
+      
+      .card-title {
+        font-size: 1.1rem;
+      }
+      
+      .btn-primary {
+        padding: 0.6rem 1rem;
+      }
     }
   </style>
 </head>
-<body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
+<body>
+  <!-- Improved Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse-fill me-1"></i> Health Monitor</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <a class="navbar-brand" href="/">
+        <i class="bi bi-heart-pulse-fill text-danger"></i>
+        Health Monitor
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse mt-2 mt-lg-0" id="navbarNav">
+
+      <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
-          <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
-          <li class="nav-item"><a class="nav-link" href="/real-time-ecg">ECG Graph</a></li>
-          <li class="nav-item"><a class="nav-link active" href="/ai-prediction">AI Prediction</a></li>
-          <li class="nav-item"><a class="nav-link active" href="/report-generator">AI Report</a></li>
-          <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/history">
+              <i class="bi bi-clock-history"></i> History
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/real-time-ecg">
+              <i class="bi bi-activity"></i> ECG Graph
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/ai-prediction">
+              <i class="bi bi-graph-up"></i> AI Prediction
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/report-generator">
+              <i class="bi bi-file-earmark-medical"></i> AI Report
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">
+              <i class="bi bi-info-circle"></i> About
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- Header -->
-  <div class="header">
-    <h2><i class="bi bi-clipboard-heart"></i> AI Health Report Generator</h2>
-    <p>Generate a detailed health report using vital signs and ECG data</p>
-  </div>
+  <!-- Enhanced Header Section -->
+  <section class="header">
+    <div class="container">
+      <h2 class="mb-3">
+        <i class="bi bi-clipboard-heart"></i> AI Health Report Generator
+      </h2>
+      <p class="lead">
+        Generate comprehensive health analyses from vital signs and ECG data powered by advanced artificial intelligence
+      </p>
+    </div>
+  </section>
 
   <!-- Form + Report Container -->
-  <div class="container py-5">
+  <div class="container mb-5">
     <div class="row g-4">
       <!-- Left: Input Form -->
-      <div class="col-lg-6">
-        <div class="card p-4">
-          <h5 class="mb-3"><i class="bi bi-pencil-square"></i> Enter Details</h5>
+      <div class="col-lg-6 animate__animated animate__fadeInLeft">
+        <div class="input-card">
+          <h5 class="card-title">
+            <i class="bi bi-pencil-square me-2"></i>Patient Information
+          </h5>
           <form id="reportForm">
             <div class="mb-3">
-              <label class="form-label"><i class="bi bi-person"></i> Patient Name</label>
+              <label class="form-label">
+                <i class="bi bi-person-badge me-2"></i>Patient Name
+              </label>
               <input type="text" class="form-control" id="patientName" required placeholder="e.g. John Doe">
             </div>
+            
             <div class="mb-3">
-              <label class="form-label"><i class="bi bi-thermometer-half"></i> Temperature (°C)</label>
-              <input type="number" class="form-control" id="temperature" step="0.1" required>
+              <label class="form-label">
+                <i class="bi bi-calendar me-2"></i>Age
+              </label>
+              <input type="number" class="form-control" id="patientAge" required placeholder="e.g. 45">
             </div>
-            <div class="mb-3">
-              <label class="form-label"><i class="bi bi-heart-pulse"></i> Pulse Rate (BPM)</label>
-              <input type="number" class="form-control" id="pulseRate" required>
+            
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">
+                  <i class="bi bi-thermometer-half me-2"></i>Temperature (°C)
+                </label>
+                <input type="number" class="form-control" id="temperature" step="0.1" required placeholder="e.g. 37.2">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">
+                  <i class="bi bi-heart-pulse me-2"></i>Pulse Rate (BPM)
+                </label>
+                <input type="number" class="form-control" id="pulseRate" required placeholder="e.g. 72">
+              </div>
             </div>
-            <div class="mb-3">
-              <label class="form-label"><i class="bi bi-file-image"></i> Upload ECG Image</label>
+            
+            <div class="mb-4">
+              <label class="form-label">
+                <i class="bi bi-file-earmark-medical me-2"></i>Upload ECG Image
+              </label>
               <input type="file" class="form-control" id="ecgImage" accept="image/*" required>
+              <div class="form-text text-muted">
+                <i class="bi bi-info-circle me-1"></i>Accepted formats: JPG, PNG, GIF
+              </div>
             </div>
-            <button type="submit" class="btn btn-primary w-100 mt-2">
-              <i class="bi bi-cpu"></i> Generate Report
+            
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="bi bi-cpu me-2"></i>Generate Health Report
             </button>
           </form>
         </div>
       </div>
 
       <!-- Right: Output Section -->
-      <div class="col-lg-6">
-        <div class="report-section">
-          <h5><i class="bi bi-journal-text"></i> AI Generated Report</h5>
+      <div class="col-lg-6 animate__animated animate__fadeInRight">
+        <div class="output-card">
+          <h5 class="card-title">
+            <i class="bi bi-journal-medical me-2"></i>AI Generated Health Report
+          </h5>
+          
           <div id="loading" class="loading my-4">
-            <div class="spinner-border text-primary loading-spinner" role="status">
+            <div class="spinner-border loading-spinner" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
-            <p class="mt-2">Generating report...</p>
+            <p>Analyzing health data and generating report...</p>
           </div>
-          <div id="reportContent" class="mt-3 text-muted">
-            <p>Fill out the form and click "Generate Report" to see results here.</p>
+          
+          <div id="reportContent" class="report-content mt-3">
+            <div class="text-center py-4 text-muted">
+              <i class="bi bi-clipboard-plus" style="font-size: 3rem; opacity: 0.3;"></i>
+              <p class="mt-3">Complete the form on the left and click "Generate Health Report" to see your AI-powered health analysis.</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Footer -->
+  <footer class="mt-5 py-4 text-center text-white" style="background: linear-gradient(135deg, #2c3e50, #1a252f); border-radius: 1.5rem 1.5rem 0 0;">
+    <div class="container">
+      <p>
+        &copy; 2025 IOT & AI Health Monitoring | Guided by Dr. Niketa Sharma | Project by Aarish, Aaditya, Anshuman & Ashmit
+      </p>
+    </div>
+  </footer>
 
   <!-- Script -->
   <script>
@@ -151,12 +508,14 @@
       e.preventDefault();
 
       const name = document.getElementById('patientName').value;
+      const age = document.getElementById('patientAge').value;
       const temperature = document.getElementById('temperature').value;
       const pulseRate = document.getElementById('pulseRate').value;
       const ecgImage = document.getElementById('ecgImage').files[0];
 
       const formData = new FormData();
       formData.append('name', name);
+      formData.append('age', age);
       formData.append('temperature', temperature);
       formData.append('pulseRate', pulseRate);
       formData.append('ecgImage', ecgImage);
@@ -175,9 +534,13 @@
         if (data.report) {
           const timestamp = new Date(data.timestamp).toLocaleString();
           document.getElementById('reportContent').innerHTML = `
-            <div class="alert alert-success">
-              <h6><i class="bi bi-person-badge"></i> Patient: ${data.name}</h6>
-              <small class="text-muted"><i class="bi bi-clock"></i> Generated at: ${timestamp}</small>
+            <div class="alert alert-success animate__animated animate__fadeIn">
+              <div class="patient-info">
+                <i class="bi bi-person-badge me-2"></i>Patient: ${data.name}, ${data.age} years
+              </div>
+              <div class="timestamp">
+                <i class="bi bi-clock me-2"></i>Generated at: ${timestamp}
+              </div>
               <hr/>
               ${data.report.split('\n').map(line => `<p>${line}</p>`).join('')}
             </div>
@@ -187,16 +550,18 @@
         }
       } catch (error) {
         document.getElementById('reportContent').innerHTML = `
-          <div class="alert alert-danger">
-            <strong>Error:</strong> ${error.message}
+          <div class="alert alert-danger animate__animated animate__fadeIn">
+            <i class="bi bi-exclamation-triangle me-2"></i><strong>Error:</strong> ${error.message}
           </div>
         `;
-      } finally {
         document.getElementById('loading').style.display = 'none';
       }
+      document.getElementById('loading').style.display = 'none';
     });
   </script>
 
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

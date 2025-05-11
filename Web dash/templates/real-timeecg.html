@@ -2,236 +2,707 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Real-Time ECG Chart</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real-Time ECG Chart - Health Monitor</title>
 
-    <!-- Bootstrap & Chart.js -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Animate.css for animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
-        body {
-            background-color: #f4f9ff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+  <style>
+    :root {
+      --primary: #0074d9;
+      --primary-dark: #004d99;
+      --primary-light: #e9f5ff;
+      --secondary: #004085;
+      --accent: #ff6b6b;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --dark: #343a40;
+      --light: #f8f9fa;
+      --text-dark: #343a40;
+      --text-light: #f8f9fa;
+      --text-muted: #6c757d;
+      --border-radius: 12px;
+      --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
 
-        .navbar {
-            background-color: #004d99;
-        }
+    body {
+      background-color: #f9fbff;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      scroll-behavior: smooth;
+    }
 
-        .navbar-brand,
-        .nav-link {
-            color: white !important;
-        }
+    /* Improved Navbar */
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 0.75rem 1rem;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
 
-        .header {
-            background-color: #004d99;
-            color: white;
-            text-align: center;
-            padding: 2rem 1rem;
-            border-bottom: 5px solid #0099ff;
-        }
+    .navbar-brand {
+      color: white !important;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
 
-        .header h2 {
-            font-size: 1.8rem;
-        }
+    .navbar-nav .nav-link {
+      color: rgba(255, 255, 255, 0.9) !important;
+      font-weight: 500;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      transition: var(--transition);
+      margin: 0 2px;
+    }
 
-        .header p {
-            font-size: 1rem;
-        }
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      color: white !important;
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
 
-        .chart-container {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            display: flex;
-            justify-content: center;
-        }
+    .navbar-nav .nav-link.active {
+      position: relative;
+    }
 
-        .chart-wrapper {
-            width: 100%;
-            max-width: 1200px;
-            /* Increased from 800px */
-            min-width: 400px;
-            /* Ensure it still works well on mobile */
-        }
+    .navbar-nav .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 3px;
+      background-color: white;
+      border-radius: 3px;
+    }
 
-        canvas {
-            width: 100% !important;
-            height: 700px !important;
-            /* Increased height */
-        }
+    /* Enhanced Header Section */
+    .header {
+      background: linear-gradient(135deg, rgba(0, 77, 153, 0.9), rgba(0, 102, 204, 0.85)),
+        url('https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940') no-repeat center center/cover;
+      color: white;
+      padding: 4rem 1rem;
+      text-align: center;
+      border-radius: 0 0 30px 30px;
+      position: relative;
+      box-shadow: 0 5px 20px rgba(0, 77, 153, 0.2);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
 
-        @media (max-width: 768px) {
-            canvas {
-                height: 500px !important;
-                /* Better on tablets */
-            }
-        }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(0, 102, 204, 0.3), transparent);
+      z-index: 0;
+    }
 
-        @media (max-width: 576px) {
-            canvas {
-                height: 400px !important;
-                /* Still viewable on phones */
-            }
-        }
-    </style>
+    .header .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .header h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      animation: fadeInDown 1s ease;
+    }
+
+    .header p {
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeInUp 1s ease 0.3s both;
+    }
+
+    /* Chart Card Container */
+    .chart-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 1.75rem;
+      transition: var(--transition);
+      border: none;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+      animation: fadeIn 1s ease;
+    }
+
+    .chart-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--success);
+      opacity: 0.7;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .card-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--success);
+      border-radius: 2px;
+    }
+
+    /* Chart Container */
+    .chart-wrapper {
+      width: 100%;
+      height: 500px;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* Controls Section */
+    .controls-section {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(0, 116, 217, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--success);
+      animation: pulse 1.5s infinite;
+    }
+
+    .view-mode-select {
+      width: auto;
+      border-radius: 8px;
+      border: 1px solid #e0e6ed;
+      padding: 0.5rem 2rem 0.5rem 1rem;
+      background-color: white;
+      font-weight: 500;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .view-mode-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(0, 116, 217, 0.15);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 5rem;
+      padding: 2rem 0;
+      background: linear-gradient(135deg, #2c3e50, #1a252f);
+      color: white;
+      text-align: center;
+      border-radius: 1.5rem 1.5rem 0 0;
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      border-radius: var(--border-radius);
+    }
+
+    .loading-spinner {
+      width: 3rem;
+      height: 3rem;
+      color: var(--primary);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .navbar-nav {
+        background-color: rgba(0, 77, 153, 0.97);
+        border-radius: 0 0 12px 12px;
+        padding: 1rem;
+        margin-top: 0.5rem;
+      }
+
+      .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .navbar-nav .nav-link.active::after {
+        display: none;
+      }
+
+      .header {
+        padding: 3rem 1rem;
+      }
+
+      .chart-wrapper {
+        height: 400px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 2.5rem 1rem;
+        border-radius: 0 0 20px 20px;
+      }
+
+      .header h2 {
+        font-size: 1.8rem;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+      }
+
+      .controls-section {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .chart-card {
+        padding: 1.25rem;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+      }
+
+      .chart-wrapper {
+        height: 350px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .header {
+        padding: 2rem 1rem;
+      }
+
+      .header h2 {
+        font-size: 1.5rem;
+      }
+
+      .header p {
+        font-size: 1rem;
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+      }
+
+      .chart-wrapper {
+        height: 300px;
+      }
+    }
+
+    /* Animation Keyframes */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <!-- Improved Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <i class="bi bi-heart-pulse-fill text-danger"></i>
+        Health Monitor
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse-fill me-1"></i> Health Monitor</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse mt-2 mt-lg-0" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/real-time-ecg">ECG Graph</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/ai-prediction">AI Prediction</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/report-generator">AI Report</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/history">
+              <i class="bi bi-clock-history"></i> History
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/real-time-ecg">
+              <i class="bi bi-activity"></i> ECG Graph
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/ai-prediction">
+              <i class="bi bi-graph-up"></i> AI Prediction
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/report-generator">
+              <i class="bi bi-file-earmark-medical"></i> AI Report
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">
+              <i class="bi bi-info-circle"></i> About
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-    <!-- Header -->
-    <div class="header">
-        <h2><i class="bi bi-activity"></i> Real-Time ECG Graph</h2>
-        <p>Displaying the latest 30 seconds of ECG signal</p>
+  <!-- Enhanced Header Section -->
+  <section class="header">
+    <div class="container">
+      <h2 class="mb-3">
+        <i class="bi bi-activity"></i> Real-Time ECG Monitoring
+      </h2>
+      <p class="lead">
+        Visualizing live electrocardiogram data with advanced waveform display
+      </p>
+    </div>
+  </section>
+
+  <!-- Content Section -->
+  <div class="container mb-5 animate__animated animate__fadeIn">
+    <!-- Controls Section -->
+    <div class="controls-section animate__animated animate__fadeInUp">
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span>Live Monitoring</span>
+      </div>
+      <div class="d-flex align-items-center">
+        <label class="form-label mb-0 me-2">View Mode:</label>
+        <select id="viewMode" class="view-mode-select">
+          <option value="smoothed" selected>Smoothed</option>
+          <option value="raw">Raw</option>
+        </select>
+      </div>
     </div>
 
-    <!-- Chart Area -->
-    <div class="container py-4">
-        <div class="d-flex justify-content-end mb-3">
-            <div>
-                <label class="form-label me-2">View Mode:</label>
-                <select id="viewMode" class="form-select d-inline-block view-mode-select">
-                    <option value="smoothed" selected>Smoothed</option>
-                    <option value="raw">Raw</option>
-                </select>
-            </div>
+    <!-- Chart Card -->
+    <div class="chart-card animate__animated animate__fadeInUp animate__delay-1s">
+      <h5 class="card-title">
+        <i class="bi bi-heart-pulse me-2"></i>ECG Waveform
+      </h5>
+      
+      <div class="chart-wrapper" id="chartContainer">
+        <canvas id="ecgChart"></canvas>
+        
+        <!-- Loading Overlay (initially hidden) -->
+        <div class="loading-overlay" id="loadingOverlay">
+          <div class="spinner-border loading-spinner" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-3">Connecting to ECG signal...</p>
         </div>
-
-        <div class="chart-container">
-            <div class="chart-wrapper">
-                <canvas id="ecgChart"></canvas>
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Chart Script -->
-    <script>
-        const ctx = document.getElementById('ecgChart').getContext('2d');
-        const ecgChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: Array.from({ length: 30 }, (_, i) => i),
-                datasets: [{
-                    label: 'ECG Signal',
-                    data: [],
-                    borderColor: '#28a745',
-                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
-                    tension: 0.3,
-                    pointRadius: 0,
-                }]
+  <!-- Footer -->
+  <footer class="py-4 text-center text-white">
+    <div class="container">
+      <p>
+        &copy; 2025 IOT & AI Health Monitoring | Guided by Dr. Niketa Sharma | Project by Aarish, Aaditya, Anshuman & Ashmit
+      </p>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    // Initialize Chart
+    const ctx = document.getElementById('ecgChart').getContext('2d');
+    const ecgChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: Array.from({ length: 30 }, (_, i) => i),
+        datasets: [{
+          label: 'ECG Signal',
+          data: [],
+          borderColor: '#28a745',
+          backgroundColor: 'rgba(40, 167, 69, 0.1)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 0,
+          borderWidth: 2.5
+        }]
+      },
+      options: {
+        animation: {
+          duration: 0 // disables animation delay to make it real-time
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            ticks: {
+              maxTicksLimit: 10,
+              color: '#666',
+              font: {
+                size: 12
+              }
             },
-            options: {
-                animation: {
-                    duration: 0 // disables animation delay to make it real-time
-                },
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        ticks: {
-                            maxTicksLimit: 15,
-                            color: '#666',
-                            font: {
-                                size: 12
-                            }
-                        },
-                        grid: {
-                            color: '#e0e0e0'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Time (s)',
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        }
-                    },
-                    y: {
-                        min: 0,
-                        max: 1024,
-                        ticks: {
-                            stepSize: 256,
-                            color: '#666',
-                            font: {
-                                size: 12
-                            }
-                        },
-                        grid: {
-                            color: '#f0f0f0',
-                            borderDash: [4, 4]
-                        },
-                        title: {
-                            display: true,
-                            text: 'ECG Value',
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        enabled: false
-                    }
-                },
-                elements: {
-                    line: {
-                        tension: 0.25,
-                        borderWidth: 2
-                    },
-                    point: {
-                        radius: 0
-                    }
-                }
+            grid: {
+              color: '#e0e0e0'
+            },
+            title: {
+              display: true,
+              text: 'Time (s)',
+              color: '#333',
+              font: {
+                size: 14,
+                weight: 'bold'
+              },
+              padding: {
+                top: 10
+              }
             }
+          },
+          y: {
+            min: 0,
+            max: 1024,
+            ticks: {
+              stepSize: 256,
+              color: '#666',
+              font: {
+                size: 12
+              }
+            },
+            grid: {
+              color: '#f0f0f0',
+              borderDash: [4, 4]
+            },
+            title: {
+              display: true,
+              text: 'ECG Value',
+              color: '#333',
+              font: {
+                size: 14,
+                weight: 'bold'
+              },
+              padding: {
+                right: 10
+              }
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            enabled: true,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            titleFont: {
+              size: 14
+            },
+            bodyFont: {
+              size: 13
+            },
+            padding: 12,
+            cornerRadius: 6,
+            callbacks: {
+              label: function(context) {
+                return `Value: ${context.raw}`;
+              }
+            }
+          }
+        },
+        interaction: {
+          mode: 'index',
+          intersect: false
+        },
+        elements: {
+          line: {
+            tension: 0.4,
+            borderWidth: 2
+          },
+          point: {
+            radius: 0,
+            hoverRadius: 6,
+            backgroundColor: 'rgba(40, 167, 69, 0.8)'
+          }
+        }
+      }
+    });
 
-        });
-
-        async function fetchECG() {
-            const mode = document.getElementById("viewMode").value;
-            const response = await fetch(`/recent-ecg?mode=${mode}`);
-            const data = await response.json();
-            if (!Array.isArray(data)) return;
-
-            ecgChart.data.labels = Array.from({ length: data.length }, (_, i) => i);
-            ecgChart.data.datasets[0].data = data.map(d => d.ecg_value);
-            ecgChart.update();
+    // Show loading overlay initially
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    
+    // Function to fetch ECG data
+    async function fetchECG() {
+      try {
+        const mode = document.getElementById("viewMode").value;
+        const response = await fetch(`/recent-ecg?mode=${mode}`);
+        
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        
+        const data = await response.json();
+        
+        if (!Array.isArray(data) || data.length === 0) {
+          throw new Error('Invalid data format');
         }
 
-        setInterval(fetchECG, 1000);
-        window.onload = fetchECG;
-    </script>
+        // Hide loading overlay once we have data
+        loadingOverlay.style.display = 'none';
+        
+        // Update chart data
+        ecgChart.data.labels = Array.from({ length: data.length }, (_, i) => i);
+        ecgChart.data.datasets[0].data = data.map(d => d.ecg_value);
+        ecgChart.update('none'); // Update without animation for smoother real-time display
+        
+        // Animate status dot to indicate active data streaming
+        document.querySelector('.status-dot').classList.add('pulse');
+        
+      } catch (error) {
+        console.error('Error fetching ECG data:', error);
+        
+        // Show error in loading overlay instead of hiding it
+        loadingOverlay.innerHTML = `
+          <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 2rem;"></i>
+          <p class="mt-3 text-danger">Error loading ECG data. <br>Retrying in 5 seconds...</p>
+        `;
+        loadingOverlay.style.display = 'flex';
+        
+        // Try again after a delay
+        setTimeout(() => {
+          loadingOverlay.innerHTML = `
+            <div class="spinner-border loading-spinner" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Connecting to ECG signal...</p>
+          `;
+        }, 5000);
+      }
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    // Update view mode
+    document.getElementById("viewMode").addEventListener('change', () => {
+      // Show loading overlay while switching modes
+      loadingOverlay.style.display = 'flex';
+      fetchECG();
+    });
+
+    // Fetch ECG data at regular intervals
+    setInterval(fetchECG, 1000);
+    
+    // Initialize on page load
+    window.onload = fetchECG;
+
+    // Handle window resize to make chart responsive
+    window.addEventListener('resize', () => {
+      ecgChart.resize();
+    });
+    
+    // Add scroll to top button
+    document.addEventListener('DOMContentLoaded', () => {
+      const scrollToTopBtn = document.createElement('button');
+      scrollToTopBtn.className = 'btn btn-success position-fixed rounded-circle d-flex align-items-center justify-content-center';
+      scrollToTopBtn.style.bottom = '20px';
+      scrollToTopBtn.style.right = '20px';
+      scrollToTopBtn.style.width = '45px';
+      scrollToTopBtn.style.height = '45px';
+      scrollToTopBtn.style.opacity = '0';
+      scrollToTopBtn.style.transition = 'opacity 0.3s ease';
+      scrollToTopBtn.style.zIndex = '1000';
+      scrollToTopBtn.innerHTML = '<i class="bi bi-arrow-up"></i>';
+      
+      scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      });
+      
+      document.body.appendChild(scrollToTopBtn);
+      
+      // Show/hide scroll button based on scroll position
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          scrollToTopBtn.style.opacity = '1';
+        } else {
+          scrollToTopBtn.style.opacity = '0';
+        }
+      });
+    });
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

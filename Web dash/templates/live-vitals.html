@@ -1,276 +1,732 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IOT & AI Health Monitoring System</title>
 
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Animate.css for animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <style>
+    :root {
+      --primary: #0074d9;
+      --primary-dark: #004d99;
+      --primary-light: #e9f5ff;
+      --secondary: #004085;
+      --accent: #ff6b6b;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+      --dark: #343a40;
+      --light: #f8f9fa;
+      --text-dark: #343a40;
+      --text-light: #f8f9fa;
+      --text-muted: #6c757d;
+      --border-radius: 12px;
+      --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
     body {
-      background-color: #f4f9ff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fbff;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      scroll-behavior: smooth;
     }
 
+    /* Improved Navbar */
     .navbar {
-      background-color: #004d99;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 0.75rem 1rem;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
     }
 
-    .navbar-brand, .nav-link {
+    .navbar-brand {
       color: white !important;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
 
-    .navbar-toggler {
-      border: none;
+    .navbar-nav .nav-link {
+      color: rgba(255, 255, 255, 0.9) !important;
+      font-weight: 500;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      transition: var(--transition);
+      margin: 0 2px;
     }
 
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      color: white !important;
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .navbar-nav .nav-link.active {
+      position: relative;
+    }
+
+    .navbar-nav .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 3px;
+      background-color: white;
+      border-radius: 3px;
+    }
+
+    /* Enhanced Header Section */
     .header {
-      background-color: #004d99;
+      background: linear-gradient(135deg, rgba(0, 77, 153, 0.9), rgba(0, 102, 204, 0.85)),
+        url('https://images.pexels.com/photos/5407251/pexels-photo-5407251.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940') no-repeat center center/cover;
       color: white;
-      padding: 2rem 1rem;
-      border-bottom: 5px solid #0099ff;
+      padding: 5rem 1rem;
       text-align: center;
+      border-radius: 0 0 30px 30px;
+      position: relative;
+      box-shadow: 0 5px 20px rgba(0, 77, 153, 0.2);
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(0, 102, 204, 0.3), transparent);
+      z-index: 0;
+    }
+
+    .header .container {
+      position: relative;
+      z-index: 2;
     }
 
     .header h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      animation: fadeInDown 1s ease;
     }
 
     .header p {
-      font-size: 1rem;
-      margin: 0;
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeInUp 1s ease 0.3s both;
+    }
+
+    .header .pulse-icon {
+      animation: pulse 2s infinite;
+      display: inline-block;
+    }
+
+    /* Improved Vitals Section */
+    .vitals-section {
+      margin-top: 40px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .section-title {
+      color: var(--primary-dark);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 2px;
     }
 
     .vital-card {
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-      padding: 1.5rem;
-      transition: 0.3s;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      padding: 1.75rem;
+      transition: var(--transition);
       height: 100%;
+      overflow: hidden;
+      position: relative;
+      border: none;
+    }
+
+    .vital-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--primary);
+      opacity: 0.7;
     }
 
     .vital-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .vital-card .card-header {
+      background: none;
+      border: none;
+      padding: 0 0 0.75rem 0;
     }
 
     .vital-title {
-      font-size: 0.95rem;
-      color: #666;
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
     }
 
     .vital-value {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-top: 0.5rem;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-top: 0.75rem;
+      transition: var(--transition);
     }
 
-    .members-card {
+    .vital-icon {
+      font-size: 1.8rem;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+
+    /* Team Cards */
+    .team-section {
+      padding: 4rem 0;
+    }
+
+    .card-member {
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      padding: 1.2rem;
-      height: 100%;
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+      border: none;
+      overflow: hidden;
+      position: relative;
     }
 
-    .members-card h5 {
-      font-size: 1.1rem;
-      margin-bottom: 0.3rem;
+    .card-member::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
     }
 
+    .card-member:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-member h6 {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--primary-dark);
+    }
+
+    /* About Sections */
     .about-section {
-      background-color: #e9f5ff;
-      padding: 3rem 1.5rem;
+      background-color: var(--primary-light);
+      padding: 4rem 1.5rem;
+      border-radius: var(--border-radius);
+      margin: 3rem 0;
+    }
+
+    .about-section:nth-of-type(even) {
+      background-color: #f0f7ff;
     }
 
     .about-section h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--primary-dark);
+      position: relative;
+      display: inline-block;
+    }
+
+    .about-section h3::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
     }
 
     .about-text {
       max-width: 900px;
       margin: 0 auto;
-      line-height: 1.7;
-      font-size: 1rem;
+      line-height: 1.8;
+      font-size: 1.05rem;
+      color: #505a68;
     }
 
+    /* Footer */
     .footer {
-      background-color: #f1f1f1;
-      padding: 20px;
+      background: linear-gradient(135deg, #2c3e50, #1a252f);
+      color: var(--text-light);
+      padding: 2rem 0;
       text-align: center;
-      font-size: 0.9rem;
+      border-radius: 1.5rem 1.5rem 0 0;
+      position: relative;
+      margin-top: 3rem;
+    }
+
+    .footer p {
+      margin-bottom: 0;
+      opacity: 0.9;
+    }
+
+    /* Timestamp Display */
+    .timestamp-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 30px;
+      padding: 0.5rem 1.5rem;
+      display: inline-block;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      margin-top: 2rem;
+    }
+
+    #timestamp {
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+
+    /* Last Update Pulse Animation */
+    .update-pulse {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background-color: #10b981;
+      border-radius: 50%;
+      margin-right: 8px;
+      position: relative;
+    }
+
+    .update-pulse::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #10b981;
+      animation: pulse-ring 2s infinite;
+      z-index: -1;
+    }
+
+    /* Animation Keyframes */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes pulse-ring {
+      0% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(2.5);
+        opacity: 0;
+      }
+    }
+
+    /* Enhanced Responsive Design */
+    @media (max-width: 992px) {
+      .navbar-nav {
+        background-color: rgba(0, 77, 153, 0.97);
+        border-radius: 0 0 12px 12px;
+        padding: 1rem;
+        margin-top: 0.5rem;
+      }
+      
+      .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.25rem;
+      }
+      
+      .navbar-nav .nav-link.active::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 4rem 1rem;
+        border-radius: 0 0 20px 20px;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .header p {
+        font-size: 1.1rem;
+      }
+      
+      .vital-value {
+        font-size: 2rem;
+      }
+      
+      .section-title {
+        font-size: 1.5rem;
+      }
+      
+      .about-section h3 {
+        font-size: 1.5rem;
+      }
+      
+      .about-text {
+        font-size: 1rem;
+        line-height: 1.7;
+      }
     }
 
     @media (max-width: 576px) {
-      .vital-value {
-        font-size: 1.5rem;
+      .header {
+        padding: 3rem 1rem;
       }
+      
+      .header h1 {
+        font-size: 1.75rem;
+      }
+      
+      .vital-card {
+        padding: 1.25rem;
+      }
+      
+      .vital-value {
+        font-size: 1.75rem;
+      }
+      
       .vital-title {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
+      }
+      
+      .timestamp-container {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .section-title {
+        font-size: 1.35rem;
       }
     }
   </style>
 </head>
+
 <body>
+  <!-- Improved Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <i class="bi bi-heart-pulse-fill text-danger"></i>
+        Health Monitor
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/history">
+              <i class="bi bi-clock-history"></i> History
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/real-time-ecg">
+              <i class="bi bi-activity"></i> ECG Graph
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/ai-prediction">
+              <i class="bi bi-graph-up"></i> AI Prediction
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/report-generator">
+              <i class="bi bi-file-earmark-medical"></i> AI Report
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">
+              <i class="bi bi-info-circle"></i> About
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Enhanced Header Section -->
+  <section class="header">
+    <div class="container">
+        <i class="bi bi-heart-pulse-fill"></i><h1 class="mb-3">IOT & AI Based Health Monitoring</h1>
+      <p class="lead">
+        Real-time comprehensive health tracking with advanced <strong>ECG</strong>, <strong>Pulse Rate</strong> & <strong>Temperature</strong> monitoring and AI-powered predictive analytics
+      </p>
+    </div>
+  </section>
+
+  <!-- Vitals Section with Improved Cards -->
+  <div class="container vitals-section">
+    <div class="row justify-content-center text-center mb-4">
+      <div class="col-lg-8">
+        <h2 class="section-title">
+          <i class="bi bi-activity text-primary me-2"></i>Live Vitals Monitoring
+        </h2>
+      </div>
+    </div>
+    
+    <div class="row g-4 text-center">
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="vital-card animate__animated animate__fadeIn">
+          <div class="vital-title">
+            <i class="bi bi-cpu vital-icon text-primary"></i>Device ID
+          </div>
+          <div class="vital-value" id="device_id">
+            <i class="bi bi-hdd-network me-1"></i>--
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="vital-card animate__animated animate__fadeIn" style="animation-delay: 0.1s;">
+          <div class="vital-title">
+            <i class="bi bi-activity vital-icon text-primary"></i>ECG
+          </div>
+          <div class="vital-value text-primary" id="ecg_value">
+            <i class="bi bi-graph-up-arrow me-1"></i>--
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="vital-card animate__animated animate__fadeIn" style="animation-delay: 0.2s;">
+          <div class="vital-title">
+            <i class="bi bi-heart-pulse vital-icon text-danger"></i>Pulse Rate
+          </div>
+          <div class="vital-value text-danger" id="pulse_value">
+            <i class="bi bi-heart-fill me-1"></i>--
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="vital-card animate__animated animate__fadeIn" style="animation-delay: 0.3s;">
+          <div class="vital-title">
+            <i class="bi bi-thermometer-half vital-icon text-success"></i>Temperature (°C)
+          </div>
+          <div class="vital-value text-success" id="temperature">
+            <i class="bi bi-thermometer-sun me-1"></i>--
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mt-4">
+      <div class="timestamp-container">
+        <span class="update-pulse"></span>
+        <strong>Last Updated:</strong> <span id="timestamp">--</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mentor Section -->
+  <div class="container team-section">
+    <div class="row justify-content-center text-center mb-4">
+      <div class="col-lg-8">
+        <h2 class="section-title">
+          <i class="bi bi-person-badge me-2"></i>Project Mentor
+        </h2>
+      </div>
+    </div>
+    
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-4">
+        <div class="card-member shadow-sm p-4 text-center animate__animated animate__fadeIn">
+          <div class="mb-3">
+            <i class="bi bi-person-circle text-primary" style="font-size: 3rem;"></i>
+          </div>
+          <h5>Dr. Niketa Sharma</h5>
+          <p class="text-muted mb-2">Associate Professor, Computer Science</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Team Section -->
+  <div class="container team-section pb-5">
+    <div class="row justify-content-center text-center mb-4">
+      <div class="col-lg-8">
+        <h2 class="section-title">
+          <i class="bi bi-people me-2"></i>Project Team Members
+        </h2>
+      </div>
+    </div>
+    
+    <div class="row text-center g-4">
+      <div class="col-md-3 col-sm-6">
+        <div class="card-member p-4 animate__animated animate__fadeIn">
+          <div class="mb-3">
+            <i class="bi bi-person-circle text-primary" style="font-size: 2.5rem;"></i>
+          </div>
+          <h6>Aarish Quazi</h6>
+          <p class="text-muted mb-0">Project Leader</p>
+        </div>
+      </div>
+      
+      <div class="col-md-3 col-sm-6">
+        <div class="card-member p-4 animate__animated animate__fadeIn" style="animation-delay: 0.1s;">
+          <div class="mb-3">
+            <i class="bi bi-person-circle text-primary" style="font-size: 2.5rem;"></i>
+          </div>
+          <h6>Aaditya Kaushik</h6>
+          <p class="text-muted mb-0">AI & Backend Developer</p>
+        </div>
+      </div>
+      
+      <div class="col-md-3 col-sm-6">
+        <div class="card-member p-4 animate__animated animate__fadeIn" style="animation-delay: 0.2s;">
+          <div class="mb-3">
+            <i class="bi bi-person-circle text-primary" style="font-size: 2.5rem;"></i>
+          </div>
+          <h6>Anshuman Singh Sikarwar</h6>
+          <p class="text-muted mb-0">Cloud Integration</p>
+        </div>
+      </div>
+      
+      <div class="col-md-3 col-sm-6">
+        <div class="card-member p-4 animate__animated animate__fadeIn" style="animation-delay: 0.3s;">
+          <div class="mb-3">
+            <i class="bi bi-person-circle text-primary" style="font-size: 2.5rem;"></i>
+          </div>
+          <h6>Ashmit Kumar Kurmi</h6>
+          <p class="text-muted mb-0">Hardware & Sensors</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Project Section -->
   <div class="container">
-    <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse-fill me-1"></i> Health Monitor</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse mt-2 mt-lg-0" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link active" href="/">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
-        <li class="nav-item"><a class="nav-link" href="/real-time-ecg">ECG Graph</a></li>
-        <li class="nav-item"><a class="nav-link" href="/ai-prediction">AI Prediction</a></li>
-        <li class="nav-item"><a class="nav-link" href="/report-generator">AI Report</a></li>
-        <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<!-- Header -->
-<div class="header">
-  <h1>IOT & AI Based Health Monitoring</h1>
-  <p>Real-time ECG, Pulse Rate & Body Temperature</p>
-</div>
-
-<!-- Vitals -->
-<div class="container py-5">
-  <h2 class="text-center mb-4">Live Vitals</h2>
-  <div class="row g-4 text-center">
-    <div class="col-12 col-sm-6 col-md-3">
-      <div class="vital-card">
-        <div class="vital-title"><i class="bi bi-cpu me-2 text-secondary"></i>Device ID</div>
-        <div class="vital-value" id="device_id">--</div>
-      </div>
-    </div>
-    <div class="col-12 col-sm-6 col-md-3">
-      <div class="vital-card">
-        <div class="vital-title"><i class="bi bi-activity me-2 text-primary"></i>ECG</div>
-        <div class="vital-value text-primary" id="ecg_value">--</div>
-      </div>
-    </div>
-    <div class="col-12 col-sm-6 col-md-3">
-      <div class="vital-card">
-        <div class="vital-title"><i class="bi bi-heart-pulse me-2 text-danger"></i>Pulse Rate</div>
-        <div class="vital-value text-danger" id="pulse_value">--</div>
-      </div>
-    </div>
-    <div class="col-12 col-sm-6 col-md-3">
-      <div class="vital-card">
-        <div class="vital-title"><i class="bi bi-thermometer-half me-2 text-success"></i>Temperature (°C)</div>
-        <div class="vital-value text-success" id="temperature">--</div>
+    <div class="about-section text-center rounded-4 shadow-sm animate__animated animate__fadeIn">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <h3>
+            <i class="bi bi-info-circle me-2"></i>About the Project
+          </h3>
+          <p class="about-text">
+            The IOT and AI Based Health Monitoring System aims to provide real-time health monitoring by collecting data such
+            as ECG, Pulse Rate, and Temperature. This project uses sensor data and artificial intelligence to predict abnormal
+            health conditions, allowing for timely medical intervention. The collected data can be used to predict potential
+            health risks, helping doctors make better decisions for their patients.
+          </p>
+        </div>
       </div>
     </div>
   </div>
-  <div class="text-center mt-4">
-    <p><strong>Last Updated:</strong> <span id="timestamp">--</span></p>
-  </div>
-</div>
 
-<!-- Mentor Section -->
-<div class="container pb-5">
-  <h2 class="text-center mb-4"><i class="bi bi-person-badge icon-title me-2"></i>Project Mentor</h2>
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-      <div class="members-card text-center">
-        <h5>Dr. Niketa Sharma</h5>
-        <p>Associate Professor, Computer Science</p>
+  <!-- About SKIT Section -->
+  <div class="container mt-4 mb-5">
+    <div class="about-section text-center rounded-4 shadow-sm animate__animated animate__fadeIn">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <h3>
+            <i class="bi bi-building me-2"></i>About Swami Keshvanand Institute of Technology
+          </h3>
+          <p class="about-text">
+            Swami Keshvanand Institute of Technology (SKIT), Jaipur, is one of the top engineering institutes in Rajasthan,
+            known for providing high-quality education in various fields of engineering and technology. SKIT fosters
+            innovation and technical expertise among students, preparing them for real-world challenges in industries like IT,
+            healthcare, and more. The college has been a hub for technological advancements and research initiatives, focusing
+            on practical learning and community service.
+          </p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Team Section -->
-<div class="container pb-5">
-  <h2 class="text-center mb-4"><i class="bi bi-people icon-title me-2"></i>Project Team Members</h2>
-  <div class="row text-center g-4">
-    <div class="col-md-3 col-sm-6">
-      <div class="card card-member p-3">
-        <h6>Aarish Quazi</h6>
-        <p class="text-muted mb-0">Project Leader</p>
-      </div>
+  <!-- Enhanced Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>
+        &copy; 2025 IOT & AI Health Monitoring | Guided by Dr. Niketa Sharma | Project by Aarish, Aaditya, Anshuman & Ashmit
+      </p>
     </div>
-    <div class="col-md-3 col-sm-6">
-      <div class="card card-member p-3">
-        <h6>Aaditya Kaushik</h6>
-        <p class="text-muted mb-0">AI & Backend Developer</p>
-      </div>
-    </div>
-    <div class="col-md-3 col-sm-6">
-      <div class="card card-member p-3">
-        <h6>Anshuman Singh Sikarwar</h6>
-        <p class="text-muted mb-0">Cloud Integration</p>
-      </div>
-    </div>
-    <div class="col-md-3 col-sm-6">
-      <div class="card card-member p-3">
-        <h6>Ashmit Kumar Kurmi</h6>
-        <p class="text-muted mb-0">Hardware & Sensors</p>
-      </div>
-    </div>
-  </div>
-</div>
+  </footer>
 
-<!-- About Project -->
-<div class="about-section text-center">
-  <h3 class="text-center mb-4"><i class="bi bi-info-circle icon-title  me-2"></i>About the Project</h3>
-  <p class="about-text">
-    The IOT and AI Based Health Monitoring System aims to provide real-time health monitoring by collecting data such as ECG, Pulse Rate, and Temperature. This project uses sensor data and artificial intelligence to predict abnormal health conditions, allowing for timely medical intervention. The collected data can be used to predict potential health risks, helping doctors make better decisions for their patients.
-  </p>
-</div>
-
-<!-- About SKIT -->
-<div class="about-section text-center">
-  <h3 class="text-center mb-4"><i class="bi bi-building icon-title  me-2"></i> About Swami Keshvanand Institute of Technology</h3>
-  <p class="about-text">
-    Swami Keshvanand Institute of Technology (SKIT), Jaipur, is one of the top engineering institutes in Rajasthan, known for providing high-quality education in various fields of engineering and technology. SKIT fosters innovation and technical expertise among students, preparing them for real-world challenges in industries like IT, healthcare, and more. The college has been a hub for technological advancements and research initiatives, focusing on practical learning and community service.
-  </p>
-</div>
-
-<!-- Footer -->
-
-<div class="footer">
-  &copy; 2025 IOT & AI Health Monitoring | Guided by Dr. Niketa Sharma | Project by Aarish, Aaditya, Anshuman & Ashmit
-</div>
-
-<!-- Scripts -->
-<script>
-  async function fetchVitals() {
-    try {
-      const res = await fetch('/live-data');
-      const data = await res.json();
-      document.getElementById('ecg_value').innerText = data.ecg_value ?? '--';
-      document.getElementById('pulse_value').innerText = data.pulse_value ?? '--';
-      document.getElementById('temperature').innerText = data.temperature ?? '--';
-      document.getElementById('device_id').innerText = data.device_id ?? 'UnifiedVitals';
-      document.getElementById('timestamp').innerText = data.timestamp
-        ? new Date(data.timestamp).toLocaleString()
-        : '--';
-    } catch (error) {
-      console.error("Error fetching vitals:", error);
+  <!-- Scripts - No changes to functionality -->
+  <script>
+    async function fetchVitals() {
+      try {
+        const res = await fetch('/live-data');
+        const data = await res.json();
+        document.getElementById('ecg_value').innerText = data.ecg_value ?? '--';
+        document.getElementById('pulse_value').innerText = data.pulse_value ?? '--';
+        document.getElementById('temperature').innerText = data.temperature ?? '--';
+        document.getElementById('device_id').innerText = data.device_id ?? 'UnifiedVitals';
+        document.getElementById('timestamp').innerText = data.timestamp
+          ? new Date(data.timestamp).toLocaleString()
+          : '--';
+      } catch (error) {
+        console.error("Error fetching vitals:", error);
+      }
     }
-  }
 
-  // Auto-refresh every 5 seconds
-  setInterval(fetchVitals, 5000);
-  window.onload = fetchVitals;
-</script>
+    // Auto-refresh every 5 seconds
+    setInterval(fetchVitals, 5000);
+    window.onload = fetchVitals;
+  </script>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
 
- 
+</html>
