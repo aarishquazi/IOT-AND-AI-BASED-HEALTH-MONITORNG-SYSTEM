@@ -24,7 +24,7 @@ It connects hardware sensors to a web dashboard and a cloud database, providing 
 - **Backend**: Python Fast API
 - **Database**: Supabase Cloud (PostgreSQL based)
 - **AI Model**: Transfer Learning based Convolutional Neural Network(CNN) for ECG classification
-- **Deployment**: Remaining......
+- **Deployment**: Web Dashboard for our project https://web-dashboard-5nyz.onrender.com/
 
 ---
 
